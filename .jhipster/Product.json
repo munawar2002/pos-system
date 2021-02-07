@@ -1,0 +1,55 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "",
+  "relationships": [],
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "categoryId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "supplierId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "buyPrice",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "sellPrice",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "photo",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "changelogDate": "20210207204838",
+  "dto": "no",
+  "searchEngine": false,
+  "service": "no",
+  "entityTableName": "product",
+  "databaseType": "sql",
+  "readOnly": false,
+  "jpaMetamodelFiltering": false,
+  "pagination": "pagination"
+}
