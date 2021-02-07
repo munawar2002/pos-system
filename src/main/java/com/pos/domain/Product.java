@@ -32,8 +32,9 @@ public class Product implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "category_id")
-    private Long categoryId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private ProductCategory category;
 
     @Column(name = "supplier_id")
     private Long supplierId;
@@ -92,17 +93,17 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public ProductCategory getCategory() {
+        return category;
     }
 
-    public Product categoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public Product category(ProductCategory category) {
+        this.category = category;
         return this;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(ProductCategory category) {
+        this.category = category;
     }
 
     public Long getSupplierId() {
@@ -216,11 +217,15 @@ public class Product implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+        String categoryName = getCategory()!=null?
+            getCategory().getName()!=null?
+                getCategory().getName() : "" : "";
+
         return "Product{" +
             "id=" + getId() +
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
-            ", categoryId=" + getCategoryId() +
+            ", category=" + categoryName +
             ", supplierId=" + getSupplierId() +
             ", buyPrice=" + getBuyPrice() +
             ", sellPrice=" + getSellPrice() +

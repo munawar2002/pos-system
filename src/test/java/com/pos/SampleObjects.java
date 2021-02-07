@@ -1,6 +1,7 @@
 package com.pos;
 
 import com.pos.domain.Employee;
+import com.pos.domain.ProductCategory;
 import com.pos.domain.enumeration.Designation;
 
 import java.sql.Timestamp;
@@ -18,6 +19,12 @@ public class SampleObjects {
             .jhiUserId(1L)
             .mobileNo("12345678912")
             .createdDate(Timestamp.valueOf(LocalDateTime.now()));
+    }
+
+    public static ProductCategory getProductCategory(){
+        return new ProductCategory()
+            .name("Electronic")
+            .creationDate(Timestamp.valueOf(LocalDateTime.now()));
     }
 
 }

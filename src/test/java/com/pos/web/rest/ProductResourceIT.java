@@ -1,7 +1,10 @@
 package com.pos.web.rest;
 
 import com.pos.PosSystemApp;
+import com.pos.SampleObjects;
 import com.pos.domain.Product;
+import com.pos.domain.ProductCategory;
+import com.pos.repository.ProductCategoryRepository;
 import com.pos.repository.ProductRepository;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -72,6 +75,9 @@ public class ProductResourceIT {
     @Autowired
     private MockMvc restProductMockMvc;
 
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
+
     private Product product;
 
     /**
@@ -80,11 +86,13 @@ public class ProductResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Product createEntity(EntityManager em) {
+    public Product createEntity(EntityManager em) {
+        ProductCategory productCategory = SampleObjects.getProductCategory();
+        productCategory = productCategoryRepository.save(productCategory);
         Product product = new Product()
             .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
-            .categoryId(DEFAULT_CATEGORY_ID)
+            .category(productCategory)
             .supplierId(DEFAULT_SUPPLIER_ID)
             .buyPrice(DEFAULT_BUY_PRICE)
             .sellPrice(DEFAULT_SELL_PRICE)
@@ -100,11 +108,13 @@ public class ProductResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Product createUpdatedEntity(EntityManager em) {
+    public Product createUpdatedEntity(EntityManager em) {
+        ProductCategory productCategory = SampleObjects.getProductCategory();
+        productCategory = productCategoryRepository.save(productCategory);
         Product product = new Product()
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .categoryId(UPDATED_CATEGORY_ID)
+            .category(productCategory)
             .supplierId(UPDATED_SUPPLIER_ID)
             .buyPrice(UPDATED_BUY_PRICE)
             .sellPrice(UPDATED_SELL_PRICE)
@@ -136,7 +146,7 @@ public class ProductResourceIT {
         Product testProduct = productList.get(productList.size() - 1);
         assertThat(testProduct.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testProduct.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testProduct.getCategoryId()).isEqualTo(DEFAULT_CATEGORY_ID);
+        assertThat(testProduct.getCategory().getName()).isEqualTo(SampleObjects.getProductCategory().getName());
         assertThat(testProduct.getSupplierId()).isEqualTo(DEFAULT_SUPPLIER_ID);
         assertThat(testProduct.getBuyPrice()).isEqualTo(DEFAULT_BUY_PRICE);
         assertThat(testProduct.getSellPrice()).isEqualTo(DEFAULT_SELL_PRICE);
@@ -216,7 +226,6 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(product.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].categoryId").value(hasItem(DEFAULT_CATEGORY_ID.intValue())))
             .andExpect(jsonPath("$.[*].supplierId").value(hasItem(DEFAULT_SUPPLIER_ID.intValue())))
             .andExpect(jsonPath("$.[*].buyPrice").value(hasItem(DEFAULT_BUY_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].sellPrice").value(hasItem(DEFAULT_SELL_PRICE.doubleValue())))
@@ -238,7 +247,6 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.id").value(product.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.categoryId").value(DEFAULT_CATEGORY_ID.intValue()))
             .andExpect(jsonPath("$.supplierId").value(DEFAULT_SUPPLIER_ID.intValue()))
             .andExpect(jsonPath("$.buyPrice").value(DEFAULT_BUY_PRICE.doubleValue()))
             .andExpect(jsonPath("$.sellPrice").value(DEFAULT_SELL_PRICE.doubleValue()))
@@ -264,12 +272,15 @@ public class ProductResourceIT {
 
         // Update the product
         Product updatedProduct = productRepository.findById(product.getId()).get();
+        ProductCategory productCategory = SampleObjects.getProductCategory();
+        productCategory = productCategoryRepository.save(productCategory);
+        updatedProduct.setCategory(productCategory);
         // Disconnect from session so that the updates on updatedProduct are not directly saved in db
         em.detach(updatedProduct);
         updatedProduct
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .categoryId(UPDATED_CATEGORY_ID)
+            .category(productCategory)
             .supplierId(UPDATED_SUPPLIER_ID)
             .buyPrice(UPDATED_BUY_PRICE)
             .sellPrice(UPDATED_SELL_PRICE)
@@ -289,7 +300,7 @@ public class ProductResourceIT {
         Product testProduct = productList.get(productList.size() - 1);
         assertThat(testProduct.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testProduct.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testProduct.getCategoryId()).isEqualTo(UPDATED_CATEGORY_ID);
+        assertThat(testProduct.getCategory().getName()).isEqualTo(SampleObjects.getProductCategory().getName());
         assertThat(testProduct.getSupplierId()).isEqualTo(UPDATED_SUPPLIER_ID);
         assertThat(testProduct.getBuyPrice()).isEqualTo(UPDATED_BUY_PRICE);
         assertThat(testProduct.getSellPrice()).isEqualTo(UPDATED_SELL_PRICE);
