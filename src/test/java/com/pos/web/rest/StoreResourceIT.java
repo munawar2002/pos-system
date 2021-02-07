@@ -4,11 +4,13 @@ import com.pos.PosSystemApp;
 import com.pos.SampleObjects;
 import com.pos.domain.Employee;
 import com.pos.domain.Store;
+import com.pos.domain.dto.StoreDto;
 import com.pos.repository.EmployeeRepository;
 import com.pos.repository.StoreRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -111,10 +113,13 @@ public class StoreResourceIT {
     @Transactional
     public void createStore() throws Exception {
         int databaseSizeBeforeCreate = storeRepository.findAll().size();
+
+        StoreDto storeDto = store.toStoreDto();
+
         // Create the Store
         restStoreMockMvc.perform(post("/api/stores")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(store)))
+            .content(TestUtil.convertObjectToJsonBytes(storeDto)))
             .andExpect(status().isCreated());
 
         // Validate the Store in the database
@@ -173,7 +178,7 @@ public class StoreResourceIT {
     public void checkActiveIsRequired() throws Exception {
         int databaseSizeBeforeTest = storeRepository.findAll().size();
         // set the field null
-        store.setActive(null);
+        store.setActive(true);
 
         // Create the Store, which fails.
 
@@ -252,9 +257,11 @@ public class StoreResourceIT {
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE);
 
+        StoreDto storeDto = updatedStore.toStoreDto();
+
         restStoreMockMvc.perform(put("/api/stores")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedStore)))
+            .content(TestUtil.convertObjectToJsonBytes(storeDto)))
             .andExpect(status().isOk());
 
         // Validate the Store in the database

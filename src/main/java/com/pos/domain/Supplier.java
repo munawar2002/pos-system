@@ -1,9 +1,7 @@
 package com.pos.domain;
 
-import com.pos.domain.dto.StoreDto;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -13,12 +11,12 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 /**
- * A Store.
+ * A Supplier.
  */
 @Entity
-@Table(name = "store")
+@Table(name = "supplier")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Store implements Serializable {
+public class Supplier implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,13 +31,14 @@ public class Store implements Serializable {
     @Column(name = "address")
     private String address;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "managed_by")
-    private Employee managedBy;
+    @Column(name = "contact_no")
+    private String contactNo;
 
-    @NotNull
-    @Column(name = "active", nullable = false)
-    private boolean active = true;
+    @Column(name = "contact_person")
+    private String contactPerson;
+
+    @Column(name = "contact_person_no")
+    private String contactPersonNo;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -60,7 +59,7 @@ public class Store implements Serializable {
         return name;
     }
 
-    public Store name(String name) {
+    public Supplier name(String name) {
         this.name = name;
         return this;
     }
@@ -73,7 +72,7 @@ public class Store implements Serializable {
         return address;
     }
 
-    public Store address(String address) {
+    public Supplier address(String address) {
         this.address = address;
         return this;
     }
@@ -82,37 +81,50 @@ public class Store implements Serializable {
         this.address = address;
     }
 
-    public Employee getManagedBy() {
-        return managedBy;
+    public String getContactNo() {
+        return contactNo;
     }
 
-    public Store managedBy(Employee managedBy) {
-        this.managedBy = managedBy;
+    public Supplier contactNo(String contactNo) {
+        this.contactNo = contactNo;
         return this;
     }
 
-    public void setManagedBy(Employee managedBy) {
-        this.managedBy = managedBy;
+    public void setContactNo(String contactNo) {
+        this.contactNo = contactNo;
     }
 
-    public boolean isActive() {
-        return active;
+    public String getContactPerson() {
+        return contactPerson;
     }
 
-    public Store active(boolean active) {
-        this.active = active;
+    public Supplier contactPerson(String contactPerson) {
+        this.contactPerson = contactPerson;
         return this;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setContactPerson(String contactPerson) {
+        this.contactPerson = contactPerson;
+    }
+
+    public String getContactPersonNo() {
+        return contactPersonNo;
+    }
+
+    public Supplier contactPersonNo(String contactPersonNo) {
+        this.contactPersonNo = contactPersonNo;
+        return this;
+    }
+
+    public void setContactPersonNo(String contactPersonNo) {
+        this.contactPersonNo = contactPersonNo;
     }
 
     public String getCreatedBy() {
         return createdBy;
     }
 
-    public Store createdBy(String createdBy) {
+    public Supplier createdBy(String createdBy) {
         this.createdBy = createdBy;
         return this;
     }
@@ -125,7 +137,7 @@ public class Store implements Serializable {
         return createdDate;
     }
 
-    public Store createdDate(Timestamp createdDate) {
+    public Supplier createdDate(Timestamp createdDate) {
         this.createdDate = createdDate;
         return this;
     }
@@ -140,19 +152,10 @@ public class Store implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Store)) {
+        if (!(o instanceof Supplier)) {
             return false;
         }
-        return id != null && id.equals(((Store) o).id);
-    }
-
-    public StoreDto toStoreDto(){
-        StoreDto storeDto = new StoreDto();
-        BeanUtils.copyProperties(this,storeDto);
-        if(getManagedBy()!=null){
-            storeDto.setManagedBy(getManagedBy().getId());
-        }
-        return storeDto;
+        return id != null && id.equals(((Supplier) o).id);
     }
 
     @Override
@@ -163,16 +166,13 @@ public class Store implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        String empName = getManagedBy()!=null?
-            getManagedBy().getFullName()!=null?
-                getManagedBy().getFullName():"" : "";
-
-        return "Store{" +
+        return "Supplier{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", address='" + getAddress() + "'" +
-            ", managedBy=" + empName +
-            ", active='" + isActive() + "'" +
+            ", contactNo='" + getContactNo() + "'" +
+            ", contactPerson='" + getContactPerson() + "'" +
+            ", contactPersonNo='" + getContactPersonNo() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
             "}";
