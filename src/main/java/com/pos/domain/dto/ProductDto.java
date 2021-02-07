@@ -10,7 +10,9 @@ import java.sql.Timestamp;
 
 public class ProductDto {
     private Long id;
+    @NotNull
     private String code;
+    @NotNull
     private String name;
     private long categoryId;
     private long supplierId;

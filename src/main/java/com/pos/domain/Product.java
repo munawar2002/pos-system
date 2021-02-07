@@ -1,14 +1,14 @@
 package com.pos.domain;
 
+import com.pos.domain.dto.ProductDto;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 
 /**
  * A Product.
@@ -36,8 +36,9 @@ public class Product implements Serializable {
     @JoinColumn(name = "category_id")
     private ProductCategory category;
 
-    @Column(name = "supplier_id")
-    private Long supplierId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 
     @Column(name = "buy_price")
     private Double buyPrice;
@@ -106,17 +107,17 @@ public class Product implements Serializable {
         this.category = category;
     }
 
-    public Long getSupplierId() {
-        return supplierId;
+    public Supplier getSupplier() {
+        return supplier;
     }
 
-    public Product supplierId(Long supplierId) {
-        this.supplierId = supplierId;
+    public Product supplier(Supplier supplier) {
+        this.supplier = supplier;
         return this;
     }
 
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     public Double getBuyPrice() {
@@ -209,6 +210,18 @@ public class Product implements Serializable {
         return id != null && id.equals(((Product) o).id);
     }
 
+    public ProductDto toProductDto(){
+        ProductDto productDto = new ProductDto();
+        BeanUtils.copyProperties(this,productDto);
+        if(getCategory()!= null) {
+            productDto.setCategoryId(getCategory().getId());
+        }
+        if(getSupplier()!= null){
+            productDto.setSupplierId(getSupplier().getId());
+        }
+        return productDto;
+    }
+
     @Override
     public int hashCode() {
         return 31;
@@ -221,16 +234,18 @@ public class Product implements Serializable {
             getCategory().getName()!=null?
                 getCategory().getName() : "" : "";
 
+        String supplierName = getSupplier()!=null?
+            getSupplier().getName()!=null?
+                getSupplier().getName() : "" : "";
+
         return "Product{" +
             "id=" + getId() +
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", category=" + categoryName +
-            ", supplierId=" + getSupplierId() +
+            ", supplier=" + supplierName +
             ", buyPrice=" + getBuyPrice() +
             ", sellPrice=" + getSellPrice() +
-            ", photo='" + getPhoto() + "'" +
-            ", photoContentType='" + getPhotoContentType() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
             "}";

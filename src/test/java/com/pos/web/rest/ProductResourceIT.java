@@ -4,9 +4,12 @@ import com.pos.PosSystemApp;
 import com.pos.SampleObjects;
 import com.pos.domain.Product;
 import com.pos.domain.ProductCategory;
+import com.pos.domain.Supplier;
+import com.pos.domain.dto.ProductDto;
 import com.pos.repository.ProductCategoryRepository;
 import com.pos.repository.ProductRepository;
 
+import com.pos.repository.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +81,9 @@ public class ProductResourceIT {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
 
+    @Autowired
+    private SupplierRepository supplierRepository;
+
     private Product product;
 
     /**
@@ -89,11 +95,15 @@ public class ProductResourceIT {
     public Product createEntity(EntityManager em) {
         ProductCategory productCategory = SampleObjects.getProductCategory();
         productCategory = productCategoryRepository.save(productCategory);
+
+        Supplier supplier = SampleObjects.getSupplier();
+        supplier = supplierRepository.save(supplier);
+
         Product product = new Product()
             .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
             .category(productCategory)
-            .supplierId(DEFAULT_SUPPLIER_ID)
+            .supplier(supplier)
             .buyPrice(DEFAULT_BUY_PRICE)
             .sellPrice(DEFAULT_SELL_PRICE)
             .photo(DEFAULT_PHOTO)
@@ -111,11 +121,15 @@ public class ProductResourceIT {
     public Product createUpdatedEntity(EntityManager em) {
         ProductCategory productCategory = SampleObjects.getProductCategory();
         productCategory = productCategoryRepository.save(productCategory);
+
+        Supplier supplier = SampleObjects.getSupplier();
+        supplier = supplierRepository.save(supplier);
+
         Product product = new Product()
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .category(productCategory)
-            .supplierId(UPDATED_SUPPLIER_ID)
+            .supplier(supplier)
             .buyPrice(UPDATED_BUY_PRICE)
             .sellPrice(UPDATED_SELL_PRICE)
             .photo(UPDATED_PHOTO)
@@ -135,9 +149,11 @@ public class ProductResourceIT {
     public void createProduct() throws Exception {
         int databaseSizeBeforeCreate = productRepository.findAll().size();
         // Create the Product
+        ProductDto productDto = product.toProductDto();
+
         restProductMockMvc.perform(post("/api/products")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(product)))
+            .content(TestUtil.convertObjectToJsonBytes(productDto)))
             .andExpect(status().isCreated());
 
         // Validate the Product in the database
@@ -147,12 +163,11 @@ public class ProductResourceIT {
         assertThat(testProduct.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testProduct.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testProduct.getCategory().getName()).isEqualTo(SampleObjects.getProductCategory().getName());
-        assertThat(testProduct.getSupplierId()).isEqualTo(DEFAULT_SUPPLIER_ID);
+        assertThat(testProduct.getSupplier().getName()).isEqualTo(SampleObjects.getSupplier().getName());
         assertThat(testProduct.getBuyPrice()).isEqualTo(DEFAULT_BUY_PRICE);
         assertThat(testProduct.getSellPrice()).isEqualTo(DEFAULT_SELL_PRICE);
         assertThat(testProduct.getPhoto()).isEqualTo(DEFAULT_PHOTO);
         assertThat(testProduct.getPhotoContentType()).isEqualTo(DEFAULT_PHOTO_CONTENT_TYPE);
-        assertThat(testProduct.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
     }
 
     @Test
@@ -162,11 +177,11 @@ public class ProductResourceIT {
 
         // Create the Product with an existing ID
         product.setId(1L);
-
+        ProductDto productDto = product.toProductDto();
         // An entity with an existing ID cannot be created, so this API call must fail
         restProductMockMvc.perform(post("/api/products")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(product)))
+            .content(TestUtil.convertObjectToJsonBytes(productDto)))
             .andExpect(status().isBadRequest());
 
         // Validate the Product in the database
@@ -183,11 +198,11 @@ public class ProductResourceIT {
         product.setCode(null);
 
         // Create the Product, which fails.
-
+        ProductDto productDto = product.toProductDto();
 
         restProductMockMvc.perform(post("/api/products")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(product)))
+            .content(TestUtil.convertObjectToJsonBytes(productDto)))
             .andExpect(status().isBadRequest());
 
         List<Product> productList = productRepository.findAll();
@@ -202,11 +217,11 @@ public class ProductResourceIT {
         product.setName(null);
 
         // Create the Product, which fails.
-
+        ProductDto productDto = product.toProductDto();
 
         restProductMockMvc.perform(post("/api/products")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(product)))
+            .content(TestUtil.convertObjectToJsonBytes(productDto)))
             .andExpect(status().isBadRequest());
 
         List<Product> productList = productRepository.findAll();
@@ -226,12 +241,10 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(product.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].supplierId").value(hasItem(DEFAULT_SUPPLIER_ID.intValue())))
             .andExpect(jsonPath("$.[*].buyPrice").value(hasItem(DEFAULT_BUY_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].sellPrice").value(hasItem(DEFAULT_SELL_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].photoContentType").value(hasItem(DEFAULT_PHOTO_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)));
+            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))));
     }
 
     @Test
@@ -247,12 +260,10 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.id").value(product.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.supplierId").value(DEFAULT_SUPPLIER_ID.intValue()))
             .andExpect(jsonPath("$.buyPrice").value(DEFAULT_BUY_PRICE.doubleValue()))
             .andExpect(jsonPath("$.sellPrice").value(DEFAULT_SELL_PRICE.doubleValue()))
             .andExpect(jsonPath("$.photoContentType").value(DEFAULT_PHOTO_CONTENT_TYPE))
-            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)))
-            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY));
+            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)));
     }
     @Test
     @Transactional
@@ -272,16 +283,22 @@ public class ProductResourceIT {
 
         // Update the product
         Product updatedProduct = productRepository.findById(product.getId()).get();
+
         ProductCategory productCategory = SampleObjects.getProductCategory();
         productCategory = productCategoryRepository.save(productCategory);
+
+        Supplier supplier = SampleObjects.getSupplier();
+        supplier = supplierRepository.save(supplier);
+
         updatedProduct.setCategory(productCategory);
+        updatedProduct.setSupplier(supplier);
         // Disconnect from session so that the updates on updatedProduct are not directly saved in db
         em.detach(updatedProduct);
         updatedProduct
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .category(productCategory)
-            .supplierId(UPDATED_SUPPLIER_ID)
+            .supplier(supplier)
             .buyPrice(UPDATED_BUY_PRICE)
             .sellPrice(UPDATED_SELL_PRICE)
             .photo(UPDATED_PHOTO)
@@ -289,9 +306,11 @@ public class ProductResourceIT {
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE);
 
+        ProductDto productDto = updatedProduct.toProductDto();
+
         restProductMockMvc.perform(put("/api/products")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedProduct)))
+            .content(TestUtil.convertObjectToJsonBytes(productDto)))
             .andExpect(status().isOk());
 
         // Validate the Product in the database
@@ -301,23 +320,22 @@ public class ProductResourceIT {
         assertThat(testProduct.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testProduct.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testProduct.getCategory().getName()).isEqualTo(SampleObjects.getProductCategory().getName());
-        assertThat(testProduct.getSupplierId()).isEqualTo(UPDATED_SUPPLIER_ID);
+        assertThat(testProduct.getSupplier().getName()).isEqualTo(SampleObjects.getSupplier().getName());
         assertThat(testProduct.getBuyPrice()).isEqualTo(UPDATED_BUY_PRICE);
         assertThat(testProduct.getSellPrice()).isEqualTo(UPDATED_SELL_PRICE);
         assertThat(testProduct.getPhoto()).isEqualTo(UPDATED_PHOTO);
         assertThat(testProduct.getPhotoContentType()).isEqualTo(UPDATED_PHOTO_CONTENT_TYPE);
-        assertThat(testProduct.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
     }
 
     @Test
     @Transactional
     public void updateNonExistingProduct() throws Exception {
         int databaseSizeBeforeUpdate = productRepository.findAll().size();
-
+        ProductDto productDto = product.toProductDto();
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProductMockMvc.perform(put("/api/products")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(product)))
+            .content(TestUtil.convertObjectToJsonBytes(productDto)))
             .andExpect(status().isBadRequest());
 
         // Validate the Product in the database
