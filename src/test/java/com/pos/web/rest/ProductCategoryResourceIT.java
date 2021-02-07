@@ -100,7 +100,6 @@ public class ProductCategoryResourceIT {
         ProductCategory testProductCategory = productCategoryList.get(productCategoryList.size() - 1);
         assertThat(testProductCategory.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testProductCategory.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
-        assertThat(testProductCategory.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
     }
 
     @Test
@@ -173,8 +172,7 @@ public class ProductCategoryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(productCategory.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
-            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE)));
+            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)));
     }
 
     @Test
@@ -189,8 +187,7 @@ public class ProductCategoryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(productCategory.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
-            .andExpect(jsonPath("$.creationDate").value(DEFAULT_CREATION_DATE));
+            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY));;
     }
     @Test
     @Transactional
@@ -228,7 +225,6 @@ public class ProductCategoryResourceIT {
         ProductCategory testProductCategory = productCategoryList.get(productCategoryList.size() - 1);
         assertThat(testProductCategory.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testProductCategory.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testProductCategory.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
     }
 
     @Test
