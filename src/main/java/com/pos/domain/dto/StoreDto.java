@@ -8,7 +8,7 @@ public class StoreDto {
     private String name;
     private String address;
     private long managedBy;
-    private Boolean active;
+    private boolean active = true;
     private String createdBy;
     private Timestamp createdDate;
 
@@ -44,11 +44,11 @@ public class StoreDto {
         this.managedBy = managedBy;
     }
 
-    public Boolean getActive() {
+    public boolean getActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 

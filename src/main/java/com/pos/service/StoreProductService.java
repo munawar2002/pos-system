@@ -1,12 +1,18 @@
 package com.pos.service;
 
+import com.pos.domain.Product;
+import com.pos.domain.Store;
 import com.pos.domain.StoreProduct;
+import com.pos.repository.ProductRepository;
 import com.pos.repository.StoreProductRepository;
+import com.pos.repository.StoreRepository;
 import com.pos.service.dto.StoreProductDTO;
 import com.pos.service.mapper.StoreProductMapper;
+import net.bytebuddy.asm.Advice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +36,12 @@ public class StoreProductService {
 
     private final StoreProductMapper storeProductMapper;
 
+    @Autowired
+    private StoreRepository storeRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
     public StoreProductService(StoreProductRepository storeProductRepository, StoreProductMapper storeProductMapper) {
         this.storeProductRepository = storeProductRepository;
         this.storeProductMapper = storeProductMapper;
@@ -44,6 +56,15 @@ public class StoreProductService {
     public StoreProductDTO save(StoreProductDTO storeProductDTO) {
         log.debug("Request to save StoreProduct : {}", storeProductDTO);
         StoreProduct storeProduct = storeProductMapper.toEntity(storeProductDTO);
+
+        Product product = productRepository.findById(storeProductDTO.getProductId())
+            .orElseThrow(()-> new RuntimeException("Product not found with id "+storeProductDTO.getProductId()));
+
+        Store store = storeRepository.findById(storeProductDTO.getStoreId())
+            .orElseThrow(()-> new RuntimeException("Store not found with id "+storeProductDTO.getStoreId()));
+
+        storeProduct.setProduct(product);
+        storeProduct.setStore(store);
         storeProduct.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         storeProduct = storeProductRepository.save(storeProduct);
         return storeProductMapper.toDto(storeProduct);

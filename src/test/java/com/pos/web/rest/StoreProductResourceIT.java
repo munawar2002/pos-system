@@ -1,9 +1,14 @@
 package com.pos.web.rest;
 
 import com.pos.PosSystemApp;
-import com.pos.domain.StoreProduct;
-import com.pos.repository.StoreProductRepository;
+import com.pos.SampleObjects;
+import com.pos.domain.*;
+import com.pos.domain.dto.ProductDto;
+import com.pos.domain.dto.StoreDto;
+import com.pos.repository.*;
+import com.pos.service.ProductService;
 import com.pos.service.StoreProductService;
+import com.pos.service.StoreService;
 import com.pos.service.dto.StoreProductDTO;
 import com.pos.service.mapper.StoreProductMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,6 +64,21 @@ public class StoreProductResourceIT {
     private StoreProductService storeProductService;
 
     @Autowired
+    private StoreService storeService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
+
+    @Autowired
+    private SupplierRepository supplierRepository;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -72,10 +92,29 @@ public class StoreProductResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static StoreProduct createEntity(EntityManager em) {
+    public StoreProduct createEntity(EntityManager em) {
+
+        Employee emp = SampleObjects.getEmployee();
+        emp = employeeRepository.save(emp);
+
+        StoreDto storeDto = SampleObjects.getStoreDto();
+        storeDto.setManagedBy(emp.getId());
+        Store store = storeService.saveStore(storeDto);
+
+        ProductCategory productCategory = SampleObjects.getProductCategory();
+        productCategory = productCategoryRepository.save(productCategory);
+
+        Supplier supplier = SampleObjects.getSupplier();
+        supplier = supplierRepository.save(supplier);
+
+        ProductDto productDto = SampleObjects.getProductDto();
+        productDto.setCategoryId(productCategory.getId());
+        productDto.setSupplierId(supplier.getId());
+        Product product = productService.saveProduct(productDto);
+
         StoreProduct storeProduct = new StoreProduct()
-            .productId(DEFAULT_PRODUCT_ID)
-            .storeId(DEFAULT_STORE_ID)
+            .product(product)
+            .store(store)
             .quantity(DEFAULT_QUANTITY)
             .createdBy(DEFAULT_CREATED_BY)
             .createdDate(DEFAULT_CREATED_DATE);
@@ -87,10 +126,28 @@ public class StoreProductResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static StoreProduct createUpdatedEntity(EntityManager em) {
+    public StoreProduct createUpdatedEntity(EntityManager em) {
+        Employee emp = SampleObjects.getEmployee();
+        emp = employeeRepository.save(emp);
+
+        StoreDto storeDto = SampleObjects.getStoreDto();
+        storeDto.setManagedBy(emp.getId());
+        Store store = storeService.saveStore(storeDto);
+
+        ProductCategory productCategory = SampleObjects.getProductCategory();
+        productCategory = productCategoryRepository.save(productCategory);
+
+        Supplier supplier = SampleObjects.getSupplier();
+        supplier = supplierRepository.save(supplier);
+
+        ProductDto productDto = SampleObjects.getProductDto();
+        productDto.setCategoryId(productCategory.getId());
+        productDto.setSupplierId(supplier.getId());
+        Product product = productService.saveProduct(productDto);
+
         StoreProduct storeProduct = new StoreProduct()
-            .productId(UPDATED_PRODUCT_ID)
-            .storeId(UPDATED_STORE_ID)
+            .product(product)
+            .store(store)
             .quantity(UPDATED_QUANTITY)
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE);
@@ -117,8 +174,6 @@ public class StoreProductResourceIT {
         List<StoreProduct> storeProductList = storeProductRepository.findAll();
         assertThat(storeProductList).hasSize(databaseSizeBeforeCreate + 1);
         StoreProduct testStoreProduct = storeProductList.get(storeProductList.size() - 1);
-        assertThat(testStoreProduct.getProductId()).isEqualTo(DEFAULT_PRODUCT_ID);
-        assertThat(testStoreProduct.getStoreId()).isEqualTo(DEFAULT_STORE_ID);
         assertThat(testStoreProduct.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
     }
 
@@ -154,8 +209,6 @@ public class StoreProductResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(storeProduct.getId().intValue())))
-            .andExpect(jsonPath("$.[*].productId").value(hasItem(DEFAULT_PRODUCT_ID.intValue())))
-            .andExpect(jsonPath("$.[*].storeId").value(hasItem(DEFAULT_STORE_ID.intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)));
     }
 
@@ -170,8 +223,6 @@ public class StoreProductResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(storeProduct.getId().intValue()))
-            .andExpect(jsonPath("$.productId").value(DEFAULT_PRODUCT_ID.intValue()))
-            .andExpect(jsonPath("$.storeId").value(DEFAULT_STORE_ID.intValue()))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY));
     }
     @Test
@@ -192,11 +243,33 @@ public class StoreProductResourceIT {
 
         // Update the storeProduct
         StoreProduct updatedStoreProduct = storeProductRepository.findById(storeProduct.getId()).get();
+
+        Employee emp = SampleObjects.getEmployee();
+        emp = employeeRepository.save(emp);
+
+        StoreDto storeDto = SampleObjects.getStoreDto();
+        storeDto.setManagedBy(emp.getId());
+        Store store = storeService.saveStore(storeDto);
+
+        ProductCategory productCategory = SampleObjects.getProductCategory();
+        productCategory = productCategoryRepository.save(productCategory);
+
+        Supplier supplier = SampleObjects.getSupplier();
+        supplier = supplierRepository.save(supplier);
+
+        ProductDto productDto = SampleObjects.getProductDto();
+        productDto.setCategoryId(productCategory.getId());
+        productDto.setSupplierId(supplier.getId());
+        Product product = productService.saveProduct(productDto);
+
+        storeProduct.setProduct(product);
+        storeProduct.setStore(store);
+
         // Disconnect from session so that the updates on updatedStoreProduct are not directly saved in db
         em.detach(updatedStoreProduct);
         updatedStoreProduct
-            .productId(UPDATED_PRODUCT_ID)
-            .storeId(UPDATED_STORE_ID)
+            .product(product)
+            .store(store)
             .quantity(UPDATED_QUANTITY)
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE);
@@ -211,8 +284,6 @@ public class StoreProductResourceIT {
         List<StoreProduct> storeProductList = storeProductRepository.findAll();
         assertThat(storeProductList).hasSize(databaseSizeBeforeUpdate);
         StoreProduct testStoreProduct = storeProductList.get(storeProductList.size() - 1);
-        assertThat(testStoreProduct.getProductId()).isEqualTo(UPDATED_PRODUCT_ID);
-        assertThat(testStoreProduct.getStoreId()).isEqualTo(UPDATED_STORE_ID);
         assertThat(testStoreProduct.getQuantity()).isEqualTo(UPDATED_QUANTITY);
     }
 

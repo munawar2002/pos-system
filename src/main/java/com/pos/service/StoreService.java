@@ -10,6 +10,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Service
 public class StoreService {
 
@@ -28,6 +31,7 @@ public class StoreService {
             .orElseThrow(()->new RuntimeException("Employee not found with id "+storeDto.getManagedBy()));
 
          store.setManagedBy(employee);
+         store.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
 
         return storeRepository.save(store);
     }

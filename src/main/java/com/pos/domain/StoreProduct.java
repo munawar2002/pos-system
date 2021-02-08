@@ -21,11 +21,13 @@ public class StoreProduct implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "product_id")
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    @Column(name = "store_id")
-    private Long storeId;
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -45,30 +47,30 @@ public class StoreProduct implements Serializable {
         this.id = id;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public StoreProduct productId(Long productId) {
-        this.productId = productId;
+    public StoreProduct product(Product product) {
+        this.product = product;
         return this;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public Long getStoreId() {
-        return storeId;
+    public Store getStore() {
+        return store;
     }
 
-    public StoreProduct storeId(Long storeId) {
-        this.storeId = storeId;
+    public StoreProduct store(Store store) {
+        this.store = store;
         return this;
     }
 
-    public void setStoreId(Long storeId) {
-        this.storeId = storeId;
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public Integer getQuantity() {
@@ -130,10 +132,19 @@ public class StoreProduct implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+
+        String storeName = getStore()!=null?
+            getStore().getName()!=null?
+                getStore().getName() :"" : "";
+
+        String productName = getProduct()!=null?
+            getProduct().getName()!=null?
+                getProduct().getName() :"" : "";
+
         return "StoreProduct{" +
             "id=" + getId() +
-            ", productId=" + getProductId() +
-            ", storeId=" + getStoreId() +
+            ", product=" + productName +
+            ", store=" + storeName +
             ", quantity=" + getQuantity() +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
