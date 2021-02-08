@@ -164,7 +164,7 @@ public class StoreProductResourceIT {
     public void createStoreProduct() throws Exception {
         int databaseSizeBeforeCreate = storeProductRepository.findAll().size();
         // Create the StoreProduct
-        StoreProductDTO storeProductDTO = storeProductMapper.toDto(storeProduct);
+        StoreProductDTO storeProductDTO = storeProduct.toStoreProductDTO();
         restStoreProductMockMvc.perform(post("/api/store-products")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(storeProductDTO)))
@@ -184,7 +184,7 @@ public class StoreProductResourceIT {
 
         // Create the StoreProduct with an existing ID
         storeProduct.setId(1L);
-        StoreProductDTO storeProductDTO = storeProductMapper.toDto(storeProduct);
+        StoreProductDTO storeProductDTO = storeProduct.toStoreProductDTO();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restStoreProductMockMvc.perform(post("/api/store-products")
@@ -273,7 +273,7 @@ public class StoreProductResourceIT {
             .quantity(UPDATED_QUANTITY)
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE);
-        StoreProductDTO storeProductDTO = storeProductMapper.toDto(updatedStoreProduct);
+        StoreProductDTO storeProductDTO = updatedStoreProduct.toStoreProductDTO();
 
         restStoreProductMockMvc.perform(put("/api/store-products")
             .contentType(MediaType.APPLICATION_JSON)
@@ -293,7 +293,7 @@ public class StoreProductResourceIT {
         int databaseSizeBeforeUpdate = storeProductRepository.findAll().size();
 
         // Create the StoreProduct
-        StoreProductDTO storeProductDTO = storeProductMapper.toDto(storeProduct);
+        StoreProductDTO storeProductDTO = storeProduct.toStoreProductDTO();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restStoreProductMockMvc.perform(put("/api/store-products")

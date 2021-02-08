@@ -6,6 +6,7 @@ import com.pos.domain.StoreProduct;
 import com.pos.repository.ProductRepository;
 import com.pos.repository.StoreProductRepository;
 import com.pos.repository.StoreRepository;
+import com.pos.security.SecurityUtils;
 import com.pos.service.dto.StoreProductDTO;
 import com.pos.service.mapper.StoreProductMapper;
 import net.bytebuddy.asm.Advice;
@@ -53,6 +54,7 @@ public class StoreProductService {
      * @param storeProductDTO the entity to save.
      * @return the persisted entity.
      */
+    @Transactional
     public StoreProductDTO save(StoreProductDTO storeProductDTO) {
         log.debug("Request to save StoreProduct : {}", storeProductDTO);
         StoreProduct storeProduct = storeProductMapper.toEntity(storeProductDTO);
@@ -65,6 +67,7 @@ public class StoreProductService {
 
         storeProduct.setProduct(product);
         storeProduct.setStore(store);
+        storeProduct.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
         storeProduct.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         storeProduct = storeProductRepository.save(storeProduct);
         return storeProductMapper.toDto(storeProduct);

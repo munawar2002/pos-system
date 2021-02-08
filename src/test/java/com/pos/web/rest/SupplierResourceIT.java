@@ -124,7 +124,6 @@ public class SupplierResourceIT {
         assertThat(testSupplier.getContactNo()).isEqualTo(DEFAULT_CONTACT_NO);
         assertThat(testSupplier.getContactPerson()).isEqualTo(DEFAULT_CONTACT_PERSON);
         assertThat(testSupplier.getContactPersonNo()).isEqualTo(DEFAULT_CONTACT_PERSON_NO);
-        assertThat(testSupplier.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
     }
 
     @Test
@@ -181,8 +180,7 @@ public class SupplierResourceIT {
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].contactNo").value(hasItem(DEFAULT_CONTACT_NO)))
             .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON)))
-            .andExpect(jsonPath("$.[*].contactPersonNo").value(hasItem(DEFAULT_CONTACT_PERSON_NO)))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)));
+            .andExpect(jsonPath("$.[*].contactPersonNo").value(hasItem(DEFAULT_CONTACT_PERSON_NO)));
     }
 
     @Test
@@ -200,8 +198,7 @@ public class SupplierResourceIT {
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
             .andExpect(jsonPath("$.contactNo").value(DEFAULT_CONTACT_NO))
             .andExpect(jsonPath("$.contactPerson").value(DEFAULT_CONTACT_PERSON))
-            .andExpect(jsonPath("$.contactPersonNo").value(DEFAULT_CONTACT_PERSON_NO))
-            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY));
+            .andExpect(jsonPath("$.contactPersonNo").value(DEFAULT_CONTACT_PERSON_NO));
     }
     @Test
     @Transactional
@@ -246,8 +243,6 @@ public class SupplierResourceIT {
         assertThat(testSupplier.getContactNo()).isEqualTo(UPDATED_CONTACT_NO);
         assertThat(testSupplier.getContactPerson()).isEqualTo(UPDATED_CONTACT_PERSON);
         assertThat(testSupplier.getContactPersonNo()).isEqualTo(UPDATED_CONTACT_PERSON_NO);
-        assertThat(testSupplier.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testSupplier.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
     }
 
     @Test

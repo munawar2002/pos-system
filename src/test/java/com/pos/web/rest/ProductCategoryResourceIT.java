@@ -99,7 +99,6 @@ public class ProductCategoryResourceIT {
         assertThat(productCategoryList).hasSize(databaseSizeBeforeCreate + 1);
         ProductCategory testProductCategory = productCategoryList.get(productCategoryList.size() - 1);
         assertThat(testProductCategory.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testProductCategory.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
     }
 
     @Test
@@ -171,8 +170,7 @@ public class ProductCategoryResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(productCategory.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
 
     @Test
@@ -186,8 +184,7 @@ public class ProductCategoryResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(productCategory.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY));;
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
     }
     @Test
     @Transactional
@@ -224,7 +221,6 @@ public class ProductCategoryResourceIT {
         assertThat(productCategoryList).hasSize(databaseSizeBeforeUpdate);
         ProductCategory testProductCategory = productCategoryList.get(productCategoryList.size() - 1);
         assertThat(testProductCategory.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testProductCategory.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
     }
 
     @Test

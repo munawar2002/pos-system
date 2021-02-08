@@ -149,7 +149,6 @@ public class EmployeeResourceIT {
         assertThat(testEmployee.getDesignation()).isEqualTo(DEFAULT_DESIGNATION);
         assertThat(testEmployee.getPhoto()).isEqualTo(DEFAULT_PHOTO);
         assertThat(testEmployee.getPhotoContentType()).isEqualTo(DEFAULT_PHOTO_CONTENT_TYPE);
-        assertThat(testEmployee.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
     }
 
     @Test
@@ -267,8 +266,7 @@ public class EmployeeResourceIT {
             .andExpect(jsonPath("$.[*].mobileNo").value(hasItem(DEFAULT_MOBILE_NO)))
             .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION.toString())))
             .andExpect(jsonPath("$.[*].photoContentType").value(hasItem(DEFAULT_PHOTO_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)));
+            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))));
     }
 
     @Test
@@ -290,8 +288,7 @@ public class EmployeeResourceIT {
             .andExpect(jsonPath("$.mobileNo").value(DEFAULT_MOBILE_NO))
             .andExpect(jsonPath("$.designation").value(DEFAULT_DESIGNATION.toString()))
             .andExpect(jsonPath("$.photoContentType").value(DEFAULT_PHOTO_CONTENT_TYPE))
-            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)))
-            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY));
+            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)));
     }
     @Test
     @Transactional
@@ -344,7 +341,6 @@ public class EmployeeResourceIT {
         assertThat(testEmployee.getDesignation()).isEqualTo(UPDATED_DESIGNATION);
         assertThat(testEmployee.getPhoto()).isEqualTo(UPDATED_PHOTO);
         assertThat(testEmployee.getPhotoContentType()).isEqualTo(UPDATED_PHOTO_CONTENT_TYPE);
-        assertThat(testEmployee.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
     }
 
     @Test

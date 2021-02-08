@@ -6,9 +6,11 @@ import com.pos.domain.Store;
 import com.pos.domain.dto.StoreDto;
 import com.pos.repository.EmployeeRepository;
 import com.pos.repository.StoreRepository;
+import com.pos.security.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -22,6 +24,7 @@ public class StoreService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Transactional
     public Store saveStore(StoreDto storeDto){
 
         Store store = new Store();
@@ -32,7 +35,7 @@ public class StoreService {
 
          store.setManagedBy(employee);
          store.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
-
+         store.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
         return storeRepository.save(store);
     }
 

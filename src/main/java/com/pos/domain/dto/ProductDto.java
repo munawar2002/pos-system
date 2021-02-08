@@ -2,11 +2,14 @@ package com.pos.domain.dto;
 
 import com.pos.domain.Product;
 import com.pos.domain.ProductCategory;
+import com.pos.service.dto.StoreProductDTO;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDto {
     private Long id;
@@ -20,6 +23,7 @@ public class ProductDto {
     private Double sellPrice;
     private byte[] photo;
     private String photoContentType;
+    private List<StoreProductDTO> storeProductDTOS;
 
     public Long getId() {
         return id;
@@ -91,5 +95,24 @@ public class ProductDto {
 
     public void setPhotoContentType(String photoContentType) {
         this.photoContentType = photoContentType;
+    }
+
+    public List<StoreProductDTO> getStoreProductDTOS() {
+        if(storeProductDTOS == null){
+            storeProductDTOS = new ArrayList<>();
+        }
+        return storeProductDTOS;
+    }
+
+    public void setStoreProductDTOS(List<StoreProductDTO> storeProductDTOS) {
+        this.storeProductDTOS = storeProductDTOS;
+    }
+
+    public List<StoreProductDTO> addStoreProductDTO(StoreProductDTO storeProductDTO){
+        if(storeProductDTOS == null){
+            storeProductDTOS = new ArrayList<>();
+        }
+        storeProductDTOS.add(storeProductDTO);
+        return storeProductDTOS;
     }
 }

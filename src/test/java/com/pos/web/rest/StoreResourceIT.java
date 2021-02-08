@@ -131,7 +131,6 @@ public class StoreResourceIT {
         assertThat(testStore.getManagedBy().getFullName())
             .isEqualTo(SampleObjects.getEmployee().getFullName());
         assertThat(testStore.isActive()).isEqualTo(DEFAULT_ACTIVE);
-        assertThat(testStore.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
     }
 
     @Test
@@ -205,8 +204,7 @@ public class StoreResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(store.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)));
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
 
     @Test
@@ -222,8 +220,7 @@ public class StoreResourceIT {
             .andExpect(jsonPath("$.id").value(store.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
-            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY));
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
     @Test
     @Transactional
@@ -273,7 +270,6 @@ public class StoreResourceIT {
         assertThat(testStore.getManagedBy().getFullName())
             .isEqualTo(SampleObjects.getEmployee().getFullName());
         assertThat(testStore.isActive()).isEqualTo(UPDATED_ACTIVE);
-        assertThat(testStore.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
     }
 
     @Test

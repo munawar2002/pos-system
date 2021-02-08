@@ -1,7 +1,9 @@
 package com.pos.domain;
 
+import com.pos.service.dto.StoreProductDTO;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -112,6 +114,14 @@ public class StoreProduct implements Serializable {
         this.createdDate = createdDate;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    public StoreProductDTO toStoreProductDTO(){
+        StoreProductDTO storeProductDTO = new StoreProductDTO();
+        BeanUtils.copyProperties(this,storeProductDTO);
+        storeProductDTO.setProductId(getProduct().getId());
+        storeProductDTO.setStoreId(getStore().getId());
+        return storeProductDTO;
+    }
 
     @Override
     public boolean equals(Object o) {
