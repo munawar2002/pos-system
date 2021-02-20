@@ -1,4 +1,4 @@
-id;code;name;category_id;supplier_id;buy_price;sell_price;photo;photo_content_type;created_by
+id;code;name;category_id;product_company_id;buy_price;sell_price;photo;photo_content_type;created_by
 1;Generic Steel Tuna;website calculating;1;1;38757;32433;../fake-data/blob/hipster.png;image/png;Consultant virtual wireless
 2;reboot;Dynamic magenta Track;1;1;6602;88209;../fake-data/blob/hipster.png;image/png;Unbranded Centers
 3;Credit Card Account;networks infomediaries;1;1;9654;32061;../fake-data/blob/hipster.png;image/png;Democratic People's Republic of Korea Internal compressing

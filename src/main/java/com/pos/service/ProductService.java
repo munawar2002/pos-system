@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class ProductService {
     private ProductCategoryRepository productCategoryRepository;
 
     @Autowired
-    private SupplierRepository supplierRepository;
+    private ProductCompanyRepository productCompanyRepository;
 
     @Transactional
     public Product saveProduct(ProductDto productDto){
@@ -43,11 +42,11 @@ public class ProductService {
             productCategoryRepository.findById(productDto.getCategoryId())
             .orElseThrow(()-> new RuntimeException("Product category not found with id "+productDto.getCategoryId()));
 
-        Supplier supplier = supplierRepository.findById(productDto.getSupplierId())
-            .orElseThrow(()-> new RuntimeException("Supplier not found with id "+productDto.getSupplierId()));
+        ProductCompany productCompany = productCompanyRepository.findById(productDto.getProductCompanyId())
+            .orElseThrow(()-> new RuntimeException("ProductCompany not found with id "+productDto.getProductCompanyId()));
 
         product.setCategory(productCategory);
-        product.setSupplier(supplier);
+        product.setProductCompany(productCompany);
         product.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
         product.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         product =  productRepository.save(product);

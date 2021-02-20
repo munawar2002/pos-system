@@ -37,8 +37,8 @@ public class Product implements Serializable {
     private ProductCategory category;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    @JoinColumn(name = "product_company_id")
+    private ProductCompany productCompany;
 
     @Column(name = "buy_price")
     private Double buyPrice;
@@ -107,17 +107,17 @@ public class Product implements Serializable {
         this.category = category;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
+    public ProductCompany getProductCompany() {
+        return productCompany;
     }
 
-    public Product supplier(Supplier supplier) {
-        this.supplier = supplier;
+    public Product productCompany(ProductCompany productCompany) {
+        this.productCompany = productCompany;
         return this;
     }
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
+    public void setProductCompany(ProductCompany productCompany) {
+        this.productCompany = productCompany;
     }
 
     public Double getBuyPrice() {
@@ -216,8 +216,8 @@ public class Product implements Serializable {
         if(getCategory()!= null) {
             productDto.setCategoryId(getCategory().getId());
         }
-        if(getSupplier()!= null){
-            productDto.setSupplierId(getSupplier().getId());
+        if(getProductCompany()!= null){
+            productDto.setProductCompanyId(getProductCompany().getId());
         }
         return productDto;
     }
@@ -234,16 +234,16 @@ public class Product implements Serializable {
             getCategory().getName()!=null?
                 getCategory().getName() : "" : "";
 
-        String supplierName = getSupplier()!=null?
-            getSupplier().getName()!=null?
-                getSupplier().getName() : "" : "";
+        String productCompany = getProductCompany()!=null?
+            getProductCompany().getName()!=null?
+                getProductCompany().getName() : "" : "";
 
         return "Product{" +
             "id=" + getId() +
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", category=" + categoryName +
-            ", supplier=" + supplierName +
+            ", productCompany=" + productCompany +
             ", buyPrice=" + getBuyPrice() +
             ", sellPrice=" + getSellPrice() +
             ", createdBy='" + getCreatedBy() + "'" +

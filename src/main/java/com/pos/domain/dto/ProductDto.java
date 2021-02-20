@@ -1,13 +1,8 @@
 package com.pos.domain.dto;
 
-import com.pos.domain.Product;
-import com.pos.domain.ProductCategory;
 import com.pos.service.dto.StoreProductDTO;
-import org.springframework.beans.BeanUtils;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +13,7 @@ public class ProductDto {
     @NotNull
     private String name;
     private long categoryId;
-    private long supplierId;
+    private long productCompanyId;
     private Double buyPrice;
     private Double sellPrice;
     private byte[] photo;
@@ -57,12 +52,12 @@ public class ProductDto {
         this.categoryId = categoryId;
     }
 
-    public long getSupplierId() {
-        return supplierId;
+    public long getProductCompanyId() {
+        return productCompanyId;
     }
 
-    public void setSupplierId(long supplierId) {
-        this.supplierId = supplierId;
+    public void setProductCompanyId(long productCompanyId) {
+        this.productCompanyId = productCompanyId;
     }
 
     public Double getBuyPrice() {

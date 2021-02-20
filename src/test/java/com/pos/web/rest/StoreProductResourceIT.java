@@ -76,7 +76,7 @@ public class StoreProductResourceIT {
     private ProductCategoryRepository productCategoryRepository;
 
     @Autowired
-    private SupplierRepository supplierRepository;
+    private ProductCompanyRepository productCompanyRepository;
 
     @Autowired
     private EntityManager em;
@@ -104,12 +104,12 @@ public class StoreProductResourceIT {
         ProductCategory productCategory = SampleObjects.getProductCategory();
         productCategory = productCategoryRepository.save(productCategory);
 
-        Supplier supplier = SampleObjects.getSupplier();
-        supplier = supplierRepository.save(supplier);
+        ProductCompany productCompany = SampleObjects.getProductCompany();
+        productCompany = productCompanyRepository.save(productCompany);
 
         ProductDto productDto = SampleObjects.getProductDto();
         productDto.setCategoryId(productCategory.getId());
-        productDto.setSupplierId(supplier.getId());
+        productDto.setProductCompanyId(productCompany.getId());
         Product product = productService.saveProduct(productDto);
 
         StoreProduct storeProduct = new StoreProduct()
@@ -137,12 +137,12 @@ public class StoreProductResourceIT {
         ProductCategory productCategory = SampleObjects.getProductCategory();
         productCategory = productCategoryRepository.save(productCategory);
 
-        Supplier supplier = SampleObjects.getSupplier();
-        supplier = supplierRepository.save(supplier);
+        ProductCompany productCompany = SampleObjects.getProductCompany();
+        productCompany = productCompanyRepository.save(productCompany);
 
         ProductDto productDto = SampleObjects.getProductDto();
         productDto.setCategoryId(productCategory.getId());
-        productDto.setSupplierId(supplier.getId());
+        productDto.setProductCompanyId(productCompany.getId());
         Product product = productService.saveProduct(productDto);
 
         StoreProduct storeProduct = new StoreProduct()
@@ -254,12 +254,12 @@ public class StoreProductResourceIT {
         ProductCategory productCategory = SampleObjects.getProductCategory();
         productCategory = productCategoryRepository.save(productCategory);
 
-        Supplier supplier = SampleObjects.getSupplier();
-        supplier = supplierRepository.save(supplier);
+        ProductCompany productCompany = SampleObjects.getProductCompany();
+        productCompany = productCompanyRepository.save(productCompany);
 
         ProductDto productDto = SampleObjects.getProductDto();
         productDto.setCategoryId(productCategory.getId());
-        productDto.setSupplierId(supplier.getId());
+        productDto.setProductCompanyId(productCompany.getId());
         Product product = productService.saveProduct(productDto);
 
         storeProduct.setProduct(product);

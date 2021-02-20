@@ -4,9 +4,11 @@ import com.pos.PosSystemApp;
 import com.pos.SampleObjects;
 import com.pos.domain.Product;
 import com.pos.domain.ProductCategory;
+import com.pos.domain.ProductCompany;
 import com.pos.domain.Supplier;
 import com.pos.domain.dto.ProductDto;
 import com.pos.repository.ProductCategoryRepository;
+import com.pos.repository.ProductCompanyRepository;
 import com.pos.repository.ProductRepository;
 
 import com.pos.repository.SupplierRepository;
@@ -82,7 +84,7 @@ public class ProductResourceIT {
     private ProductCategoryRepository productCategoryRepository;
 
     @Autowired
-    private SupplierRepository supplierRepository;
+    private ProductCompanyRepository productCompanyRepository;
 
     private Product product;
 
@@ -96,14 +98,14 @@ public class ProductResourceIT {
         ProductCategory productCategory = SampleObjects.getProductCategory();
         productCategory = productCategoryRepository.save(productCategory);
 
-        Supplier supplier = SampleObjects.getSupplier();
-        supplier = supplierRepository.save(supplier);
+        ProductCompany productCompany = SampleObjects.getProductCompany();
+        productCompany = productCompanyRepository.save(productCompany);
 
         Product product = new Product()
             .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
             .category(productCategory)
-            .supplier(supplier)
+            .productCompany(productCompany)
             .buyPrice(DEFAULT_BUY_PRICE)
             .sellPrice(DEFAULT_SELL_PRICE)
             .photo(DEFAULT_PHOTO)
@@ -122,14 +124,14 @@ public class ProductResourceIT {
         ProductCategory productCategory = SampleObjects.getProductCategory();
         productCategory = productCategoryRepository.save(productCategory);
 
-        Supplier supplier = SampleObjects.getSupplier();
-        supplier = supplierRepository.save(supplier);
+        ProductCompany productCompany = SampleObjects.getProductCompany();
+        productCompany = productCompanyRepository.save(productCompany);
 
         Product product = new Product()
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .category(productCategory)
-            .supplier(supplier)
+            .productCompany(productCompany)
             .buyPrice(UPDATED_BUY_PRICE)
             .sellPrice(UPDATED_SELL_PRICE)
             .photo(UPDATED_PHOTO)
@@ -163,7 +165,7 @@ public class ProductResourceIT {
         assertThat(testProduct.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testProduct.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testProduct.getCategory().getName()).isEqualTo(SampleObjects.getProductCategory().getName());
-        assertThat(testProduct.getSupplier().getName()).isEqualTo(SampleObjects.getSupplier().getName());
+        assertThat(testProduct.getProductCompany().getName()).isEqualTo(SampleObjects.getSupplier().getName());
         assertThat(testProduct.getBuyPrice()).isEqualTo(DEFAULT_BUY_PRICE);
         assertThat(testProduct.getSellPrice()).isEqualTo(DEFAULT_SELL_PRICE);
         assertThat(testProduct.getPhoto()).isEqualTo(DEFAULT_PHOTO);
@@ -287,18 +289,18 @@ public class ProductResourceIT {
         ProductCategory productCategory = SampleObjects.getProductCategory();
         productCategory = productCategoryRepository.save(productCategory);
 
-        Supplier supplier = SampleObjects.getSupplier();
-        supplier = supplierRepository.save(supplier);
+        ProductCompany productCompany = SampleObjects.getProductCompany();
+        productCompany = productCompanyRepository.save(productCompany);
 
         updatedProduct.setCategory(productCategory);
-        updatedProduct.setSupplier(supplier);
+        updatedProduct.setProductCompany(productCompany);
         // Disconnect from session so that the updates on updatedProduct are not directly saved in db
         em.detach(updatedProduct);
         updatedProduct
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .category(productCategory)
-            .supplier(supplier)
+            .productCompany(productCompany)
             .buyPrice(UPDATED_BUY_PRICE)
             .sellPrice(UPDATED_SELL_PRICE)
             .photo(UPDATED_PHOTO)
@@ -320,7 +322,7 @@ public class ProductResourceIT {
         assertThat(testProduct.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testProduct.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testProduct.getCategory().getName()).isEqualTo(SampleObjects.getProductCategory().getName());
-        assertThat(testProduct.getSupplier().getName()).isEqualTo(SampleObjects.getSupplier().getName());
+        assertThat(testProduct.getProductCompany().getName()).isEqualTo(SampleObjects.getSupplier().getName());
         assertThat(testProduct.getBuyPrice()).isEqualTo(UPDATED_BUY_PRICE);
         assertThat(testProduct.getSellPrice()).isEqualTo(UPDATED_SELL_PRICE);
         assertThat(testProduct.getPhoto()).isEqualTo(UPDATED_PHOTO);

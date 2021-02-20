@@ -2,6 +2,7 @@ package com.pos;
 
 import com.pos.domain.Employee;
 import com.pos.domain.ProductCategory;
+import com.pos.domain.ProductCompany;
 import com.pos.domain.Supplier;
 import com.pos.domain.dto.ProductDto;
 import com.pos.domain.dto.StoreDto;
@@ -51,11 +52,21 @@ public class SampleObjects {
     public static ProductDto getProductDto() {
         ProductDto productDto = new ProductDto();
         productDto.setName("Product1");
-        productDto.setSupplierId(1L);
+        productDto.setProductCompanyId(1L);
         productDto.setCategoryId(1);
         productDto.setBuyPrice(330d);
         productDto.setCode("abc1");
         productDto.setSellPrice(555d);
         return productDto;
+    }
+
+    public static ProductCompany getProductCompany() {
+        return new ProductCompany()
+            .name("Dawlance")
+            .address("Sample address")
+            .contactNo("1213123")
+            .contactPerson("Zubair Memon")
+            .contactPersonNo("123344")
+            .createdDate(Timestamp.valueOf(LocalDateTime.now()));
     }
 }

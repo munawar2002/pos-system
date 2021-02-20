@@ -28,6 +28,10 @@ import { RouterModule } from '@angular/router';
         path: 'store-product',
         loadChildren: () => import('./store-product/store-product.module').then(m => m.PosSystemStoreProductModule),
       },
+      {
+        path: 'product-company',
+        loadChildren: () => import('./product-company/product-company.module').then(m => m.PosSystemProductCompanyModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],
