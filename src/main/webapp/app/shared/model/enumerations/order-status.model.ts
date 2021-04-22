@@ -1,0 +1,15 @@
+export const enum OrderStatus {
+  COMPLETED = 'COMPLETED',
+
+  INPROGRESS = 'INPROGRESS',
+
+  FAILED = 'FAILED',
+
+  CANCELLED = 'CANCELLED',
+
+  DELIVERED = 'DELIVERED',
+
+  PAYMENT_DUE = 'PAYMENT_DUE',
+
+  REFUNDED = 'REFUNDED',
+}

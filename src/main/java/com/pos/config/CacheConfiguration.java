@@ -55,6 +55,7 @@ public class CacheConfiguration {
             createCache(cm, com.pos.domain.Product.class.getName());
             createCache(cm, com.pos.domain.StoreProduct.class.getName());
             createCache(cm, com.pos.domain.ProductCompany.class.getName());
+            createCache(cm, com.pos.domain.PurchaseOrder.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

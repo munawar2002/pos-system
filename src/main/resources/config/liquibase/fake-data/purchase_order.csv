@@ -1,0 +1,11 @@
+id;supplier_id;total_amount;payment_type;order_status;payment_status;shipping_date;shipping_required;created_by;remarks
+1;20270;66341;CREDIT;COMPLETED;PARTIAL_PAID;2021-04-22;true;Baby Kentucky;Agent Tools panel
+2;85915;59130;PARTIAL;FAILED;UNPAID;2021-04-22;false;back up;Regional matrix
+3;36364;95267;PARTIAL;COMPLETED;PAID;2021-04-22;false;synthesizing Berkshire;Pennsylvania Money Market Account
+4;25653;99143;PARTIAL;PAYMENT_DUE;REFUNDED;2021-04-22;false;Global;bypass Senegal
+5;97297;21604;CREDIT;DELIVERED;REFUNDED;2021-04-22;true;Garden array Cliffs;Multi-channelled bypass
+6;96867;61543;PARTIAL;COMPLETED;PARTIAL_REFUNDED;2021-04-22;true;Credit Card Account enhance Chief;Cambridgeshire
+7;36958;82856;CASH;INPROGRESS;REFUNDED;2021-04-22;true;Refined Steel Shirt Representative copying;bluetooth withdrawal Horizontal
+8;23918;60022;CREDIT;PAYMENT_DUE;UNPAID;2021-04-22;false;invoice payment;parsing
+9;36794;7272;PARTIAL;PAYMENT_DUE;REFUNDED;2021-04-22;false;proactive system;Keyboard Antigua and Barbuda
+10;31835;48688;CREDIT;REFUNDED;REFUNDED;2021-04-22;false;pixel Granite mobile;deposit
