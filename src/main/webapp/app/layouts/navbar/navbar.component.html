@@ -75,6 +75,18 @@
                             <span>Purchase Order</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="purchase-order-breakdown" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                            <span>Purchase Order Breakdown</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="purchase-invoice" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                            <span>Purchase Invoice</span>
+                        </a>
+                    </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>

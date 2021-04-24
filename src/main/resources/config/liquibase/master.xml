@@ -22,6 +22,8 @@
     <include file="config/liquibase/changelog/20210208204005_added_entity_StoreProduct.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210220134715_added_entity_ProductCompany.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210422222118_added_entity_PurchaseOrder.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210424012042_added_entity_PurchaseOrderBreakdown.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210424014642_added_entity_PurchaseInvoice.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->

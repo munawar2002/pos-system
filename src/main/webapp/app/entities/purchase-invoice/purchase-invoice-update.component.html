@@ -1,0 +1,112 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-purchase-invoice-heading">Create or edit a Purchase Invoice</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_supplierId">Supplier Id</label>
+                    <input type="number" class="form-control" name="supplierId" id="field_supplierId"
+                           formControlName="supplierId"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paymentType">Payment Type</label>
+                    <select class="form-control" name="paymentType" formControlName="paymentType" id="field_paymentType">
+                        <option value="CREDIT">CREDIT</option>
+                        <option value="CASH">CASH</option>
+                        <option value="PARTIAL">PARTIAL</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_purchaseOrderId">Purchase Order Id</label>
+                    <input type="number" class="form-control" name="purchaseOrderId" id="field_purchaseOrderId"
+                           formControlName="purchaseOrderId"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_invoiceStatus">Invoice Status</label>
+                    <select class="form-control" name="invoiceStatus" formControlName="invoiceStatus" id="field_invoiceStatus">
+                        <option value="COMPLETED">COMPLETED</option>
+                        <option value="INPROGRESS">INPROGRESS</option>
+                        <option value="FAILED">FAILED</option>
+                        <option value="CANCELLED">CANCELLED</option>
+                        <option value="DELIVERED">DELIVERED</option>
+                        <option value="PAYMENT_DUE">PAYMENT_DUE</option>
+                        <option value="REFUNDED">REFUNDED</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paidAmount">Paid Amount</label>
+                    <input type="number" class="form-control" name="paidAmount" id="field_paidAmount"
+                           formControlName="paidAmount"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_totalAmount">Total Amount</label>
+                    <input type="number" class="form-control" name="totalAmount" id="field_totalAmount"
+                           formControlName="totalAmount"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_tenderedAmount">Tendered Amount</label>
+                    <input type="number" class="form-control" name="tenderedAmount" id="field_tenderedAmount"
+                           formControlName="tenderedAmount"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_discountAvailed">Discount Availed</label>
+                    <input type="checkbox" class="form-control" name="discountAvailed" id="field_discountAvailed"
+                           formControlName="discountAvailed"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_discountPercentage">Discount Percentage</label>
+                    <input type="number" class="form-control" name="discountPercentage" id="field_discountPercentage"
+                           formControlName="discountPercentage"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_discountAmount">Discount Amount</label>
+                    <input type="number" class="form-control" name="discountAmount" id="field_discountAmount"
+                           formControlName="discountAmount"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                           formControlName="createdBy"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_createdDate">Created Date</label>
+                    <div class="input-group">
+                        <input id="field_createdDate" type="text" class="form-control" name="createdDate" ngbDatepicker #createdDateDp="ngbDatepicker" formControlName="createdDate"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="createdDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="purchaseInvoice">
+            <h2><span>Purchase Invoice</span> {{ purchaseInvoice.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Supplier Id</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.supplierId }}</span>
+                </dd>
+                <dt><span>Payment Type</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.paymentType }}</span>
+                </dd>
+                <dt><span>Purchase Order Id</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.purchaseOrderId }}</span>
+                </dd>
+                <dt><span>Invoice Status</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.invoiceStatus }}</span>
+                </dd>
+                <dt><span>Paid Amount</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.paidAmount }}</span>
+                </dd>
+                <dt><span>Total Amount</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.totalAmount }}</span>
+                </dd>
+                <dt><span>Tendered Amount</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.tenderedAmount }}</span>
+                </dd>
+                <dt><span>Discount Availed</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.discountAvailed }}</span>
+                </dd>
+                <dt><span>Discount Percentage</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.discountPercentage }}</span>
+                </dd>
+                <dt><span>Discount Amount</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.discountAmount }}</span>
+                </dd>
+                <dt><span>Created By</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.createdBy }}</span>
+                </dd>
+                <dt><span>Created Date</span></dt>
+                <dd>
+                    <span>{{ purchaseInvoice.createdDate }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/purchase-invoice', purchaseInvoice.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

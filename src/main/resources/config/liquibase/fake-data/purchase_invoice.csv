@@ -1,0 +1,11 @@
+id;supplier_id;payment_type;purchase_order_id;invoice_status;paid_amount;total_amount;tendered_amount;discount_availed;discount_percentage;discount_amount;created_by;created_date
+1;1;CREDIT;90143;REFUNDED;97416;60341;3151;true;88187;71877;lavender Park;2021-04-23
+2;1;CASH;90859;CANCELLED;62519;84900;24972;false;96978;46177;French Southern Territories circuit;2021-04-23
+3;1;CREDIT;63441;CANCELLED;41531;42841;94056;true;77134;93388;metrics Tasty Wooden Pants mobile;2021-04-23
+4;1;CREDIT;59536;REFUNDED;69184;29555;15123;false;55438;78287;Health Massachusetts Small;2021-04-23
+5;1;PARTIAL;96559;REFUNDED;7483;72189;11700;false;86594;98087;incubate;2021-04-23
+6;1;CREDIT;28490;DELIVERED;6685;56689;88123;true;24311;94960;maximized;2021-04-23
+7;1;CREDIT;30863;CANCELLED;71549;73320;43236;true;54880;51633;Internal Lodge Computer;2021-04-23
+8;1;CREDIT;69663;PAYMENT_DUE;45193;52259;60705;false;32263;41360;Wallis and Futuna Investment Account cross-platform;2021-04-24
+9;1;CASH;80475;PAYMENT_DUE;79605;45503;84292;false;51753;9358;Money Market Account Licensed Awesome;2021-04-24
+10;1;PARTIAL;37695;REFUNDED;98769;47150;71422;false;35369;48204;Metical;2021-04-23

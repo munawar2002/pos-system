@@ -36,6 +36,15 @@ import { RouterModule } from '@angular/router';
         path: 'purchase-order',
         loadChildren: () => import('./purchase-order/purchase-order.module').then(m => m.PosSystemPurchaseOrderModule),
       },
+      {
+        path: 'purchase-order-breakdown',
+        loadChildren: () =>
+          import('./purchase-order-breakdown/purchase-order-breakdown.module').then(m => m.PosSystemPurchaseOrderBreakdownModule),
+      },
+      {
+        path: 'purchase-invoice',
+        loadChildren: () => import('./purchase-invoice/purchase-invoice.module').then(m => m.PosSystemPurchaseInvoiceModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

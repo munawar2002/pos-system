@@ -1,0 +1,66 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "",
+  "relationships": [],
+  "fields": [
+    {
+      "fieldName": "supplierId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "paymentType",
+      "fieldType": "PaymentType",
+      "fieldValues": "CREDIT,CASH,PARTIAL"
+    },
+    {
+      "fieldName": "purchaseOrderId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "invoiceStatus",
+      "fieldType": "OrderStatus",
+      "fieldValues": "COMPLETED,INPROGRESS,FAILED,CANCELLED,DELIVERED,PAYMENT_DUE,REFUNDED"
+    },
+    {
+      "fieldName": "paidAmount",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalAmount",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "tenderedAmount",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "discountAvailed",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "discountPercentage",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "discountAmount",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "changelogDate": "20210424014642",
+  "dto": "no",
+  "searchEngine": false,
+  "service": "no",
+  "entityTableName": "purchase_invoice",
+  "databaseType": "sql",
+  "readOnly": false,
+  "jpaMetamodelFiltering": false,
+  "pagination": "no"
+}

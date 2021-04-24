@@ -1,0 +1,32 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "",
+  "relationships": [],
+  "fields": [
+    {
+      "fieldName": "purchaseOrderId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "productId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "quantity",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "unitPrice",
+      "fieldType": "Double"
+    }
+  ],
+  "changelogDate": "20210424012042",
+  "dto": "no",
+  "searchEngine": false,
+  "service": "no",
+  "entityTableName": "purchase_order_breakdown",
+  "databaseType": "sql",
+  "readOnly": false,
+  "jpaMetamodelFiltering": false,
+  "pagination": "no"
+}
