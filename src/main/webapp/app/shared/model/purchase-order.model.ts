@@ -10,27 +10,13 @@ export interface IPurchaseOrder {
   paymentType?: PaymentType;
   orderStatus?: OrderStatus;
   paymentStatus?: PaymentStatus;
-  shippingDate?: Moment;
+  shippingDate?: string;
   shippingRequired?: boolean;
-  createdDate?: Moment;
+  createdDate?: string;
   createdBy?: string;
   remarks?: string;
 }
 
-export class PurchaseOrder implements IPurchaseOrder {
-  constructor(
-    public id?: number,
-    public supplierId?: number,
-    public totalAmount?: number,
-    public paymentType?: PaymentType,
-    public orderStatus?: OrderStatus,
-    public paymentStatus?: PaymentStatus,
-    public shippingDate?: Moment,
-    public shippingRequired?: boolean,
-    public createdDate?: Moment,
-    public createdBy?: string,
-    public remarks?: string
-  ) {
-    this.shippingRequired = this.shippingRequired || false;
-  }
-}
+export const defaultValue: Readonly<IPurchaseOrder> = {
+  shippingRequired: false,
+};

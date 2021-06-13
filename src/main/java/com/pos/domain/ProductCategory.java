@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 
 /**
@@ -33,7 +32,7 @@ public class ProductCategory implements Serializable {
 
     @NotNull
     @Column(name = "creation_date", nullable = false)
-    private Timestamp creationDate;
+    private ZonedDateTime creationDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -70,16 +69,16 @@ public class ProductCategory implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public Timestamp getCreationDate() {
+    public ZonedDateTime getCreationDate() {
         return creationDate;
     }
 
-    public ProductCategory creationDate(Timestamp creationDate) {
+    public ProductCategory creationDate(ZonedDateTime creationDate) {
         this.creationDate = creationDate;
         return this;
     }
 
-    public void setCreationDate(Timestamp creationDate) {
+    public void setCreationDate(ZonedDateTime creationDate) {
         this.creationDate = creationDate;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

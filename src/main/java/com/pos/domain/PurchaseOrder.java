@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 
 import com.pos.domain.enumeration.PaymentType;
@@ -30,9 +29,8 @@ public class PurchaseOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    @Column(name = "supplier_id")
+    private Long supplierId;
 
     @Column(name = "total_amount")
     private Double totalAmount;
@@ -57,7 +55,7 @@ public class PurchaseOrder implements Serializable {
     private Boolean shippingRequired;
 
     @Column(name = "created_date")
-    private Timestamp createdDate;
+    private LocalDate createdDate;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -74,17 +72,17 @@ public class PurchaseOrder implements Serializable {
         this.id = id;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
+    public Long getSupplierId() {
+        return supplierId;
     }
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-
-    public PurchaseOrder supplier(Supplier supplier) {
-        this.supplier = supplier;
+    public PurchaseOrder supplierId(Long supplierId) {
+        this.supplierId = supplierId;
         return this;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 
     public Double getTotalAmount() {
@@ -165,16 +163,16 @@ public class PurchaseOrder implements Serializable {
         this.shippingRequired = shippingRequired;
     }
 
-    public Timestamp getCreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public PurchaseOrder createdDate(Timestamp createdDate) {
+    public PurchaseOrder createdDate(LocalDate createdDate) {
         this.createdDate = createdDate;
         return this;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -224,13 +222,9 @@ public class PurchaseOrder implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        String supplierName = "";
-        if(supplier != null){
-            supplierName = supplier.getName();
-        }
         return "PurchaseOrder{" +
             "id=" + getId() +
-            ", supplierId=" + supplierName +
+            ", supplierId=" + getSupplierId() +
             ", totalAmount=" + getTotalAmount() +
             ", paymentType='" + getPaymentType() + "'" +
             ", orderStatus='" + getOrderStatus() + "'" +

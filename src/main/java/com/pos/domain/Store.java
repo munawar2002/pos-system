@@ -1,15 +1,12 @@
 package com.pos.domain;
 
-import com.pos.domain.dto.StoreDto;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 
 /**
@@ -33,19 +30,18 @@ public class Store implements Serializable {
     @Column(name = "address")
     private String address;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "managed_by")
-    private Employee managedBy;
+    @Column(name = "managed_by")
+    private Long managedBy;
 
     @NotNull
     @Column(name = "active", nullable = false)
-    private boolean active = true;
+    private Boolean active;
 
     @Column(name = "created_by")
     private String createdBy;
 
     @Column(name = "created_date")
-    private Timestamp createdDate;
+    private LocalDate createdDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -82,29 +78,29 @@ public class Store implements Serializable {
         this.address = address;
     }
 
-    public Employee getManagedBy() {
+    public Long getManagedBy() {
         return managedBy;
     }
 
-    public Store managedBy(Employee managedBy) {
+    public Store managedBy(Long managedBy) {
         this.managedBy = managedBy;
         return this;
     }
 
-    public void setManagedBy(Employee managedBy) {
+    public void setManagedBy(Long managedBy) {
         this.managedBy = managedBy;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public Store active(boolean active) {
+    public Store active(Boolean active) {
         this.active = active;
         return this;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -121,16 +117,16 @@ public class Store implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public Timestamp getCreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public Store createdDate(Timestamp createdDate) {
+    public Store createdDate(LocalDate createdDate) {
         this.createdDate = createdDate;
         return this;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -146,15 +142,6 @@ public class Store implements Serializable {
         return id != null && id.equals(((Store) o).id);
     }
 
-    public StoreDto toStoreDto(){
-        StoreDto storeDto = new StoreDto();
-        BeanUtils.copyProperties(this,storeDto);
-        if(getManagedBy()!=null){
-            storeDto.setManagedBy(getManagedBy().getId());
-        }
-        return storeDto;
-    }
-
     @Override
     public int hashCode() {
         return 31;
@@ -163,15 +150,11 @@ public class Store implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        String empName = getManagedBy()!=null?
-            getManagedBy().getFullName()!=null?
-                getManagedBy().getFullName():"" : "";
-
         return "Store{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", address='" + getAddress() + "'" +
-            ", managedBy=" + empName +
+            ", managedBy=" + getManagedBy() +
             ", active='" + isActive() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +

@@ -2,7 +2,6 @@ package com.pos.web.rest;
 
 import com.pos.domain.ProductCompany;
 import com.pos.repository.ProductCompanyRepository;
-import com.pos.security.SecurityUtils;
 import com.pos.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,8 +52,6 @@ public class ProductCompanyResource {
         if (productCompany.getId() != null) {
             throw new BadRequestAlertException("A new productCompany cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        productCompany.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-        productCompany.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         ProductCompany result = productCompanyRepository.save(productCompany);
         return ResponseEntity.created(new URI("/api/product-companies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -78,8 +73,6 @@ public class ProductCompanyResource {
         if (productCompany.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        productCompany.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-        productCompany.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         ProductCompany result = productCompanyRepository.save(productCompany);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, productCompany.getId().toString()))

@@ -1,6 +1,5 @@
 package com.pos.service.dto;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.io.Serializable;
 
@@ -8,7 +7,7 @@ import java.io.Serializable;
  * A DTO for the {@link com.pos.domain.StoreProduct} entity.
  */
 public class StoreProductDTO implements Serializable {
-
+    
     private Long id;
 
     private Long productId;
@@ -19,9 +18,9 @@ public class StoreProductDTO implements Serializable {
 
     private String createdBy;
 
-    private Timestamp createdDate;
+    private LocalDate createdDate;
 
-
+    
     public Long getId() {
         return id;
     }
@@ -62,11 +61,11 @@ public class StoreProductDTO implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public Timestamp getCreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
 

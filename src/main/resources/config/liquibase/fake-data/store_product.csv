@@ -1,11 +1,11 @@
-id;product_id;store_id;quantity;created_by
-1;1;1;40567;responsive Developer markets
-2;1;1;51519;Total California Accountability
-3;1;1;33135;digital tan Salad
-4;1;1;79911;programming redundant
-5;1;1;22034;invoice extend Accounts
-6;1;1;95103;capacitor
-7;1;1;57544;deposit Electronics
-8;1;1;74616;Automotive gold Metrics
-9;1;1;46748;Drives
-10;1;1;6276;Intelligent Metal Tuna
+id;product_id;store_id;quantity;created_by;created_date
+1;77868;40554;40567;responsive Developer markets;2021-02-08
+2;39311;57585;51519;Total California Accountability;2021-02-08
+3;92779;61037;33135;digital tan Salad;2021-02-08
+4;19215;27473;79911;programming redundant;2021-02-08
+5;15204;56422;22034;invoice extend Accounts;2021-02-08
+6;75374;16017;95103;capacitor;2021-02-07
+7;99518;77900;57544;deposit Electronics;2021-02-08
+8;30312;30591;74616;Automotive gold Metrics;2021-02-08
+9;75566;6862;46748;Drives;2021-02-07
+10;29169;25468;6276;Intelligent Metal Tuna;2021-02-08

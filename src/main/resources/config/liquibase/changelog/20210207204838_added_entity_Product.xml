@@ -25,7 +25,7 @@
             <column name="category_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="product_company_id" type="bigint">
+            <column name="supplier_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="buy_price" type="double">
@@ -43,8 +43,8 @@
             <column name="created_by" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false" />
+            <column name="created_date" type="date">
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -72,13 +72,13 @@
             <column name="code" type="string"/>
             <column name="name" type="string"/>
             <column name="category_id" type="numeric"/>
-            <column name="product_company_id" type="numeric"/>
+            <column name="supplier_id" type="numeric"/>
             <column name="buy_price" type="numeric"/>
             <column name="sell_price" type="numeric"/>
             <column name="photo" type="blob"/>
             <column name="photo_content_type" type="string"/>
             <column name="created_by" type="string"/>
-            <column name="created_date" type="timestamp"/>
+            <column name="created_date" type="date"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

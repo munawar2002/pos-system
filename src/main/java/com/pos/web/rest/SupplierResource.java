@@ -2,7 +2,6 @@ package com.pos.web.rest;
 
 import com.pos.domain.Supplier;
 import com.pos.repository.SupplierRepository;
-import com.pos.security.SecurityUtils;
 import com.pos.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,9 +53,6 @@ public class SupplierResource {
         if (supplier.getId() != null) {
             throw new BadRequestAlertException("A new supplier cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
-        supplier.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-        supplier.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         Supplier result = supplierRepository.save(supplier);
         return ResponseEntity.created(new URI("/api/suppliers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -80,9 +74,6 @@ public class SupplierResource {
         if (supplier.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-
-        supplier.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-        supplier.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         Supplier result = supplierRepository.save(supplier);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, supplier.getId().toString()))

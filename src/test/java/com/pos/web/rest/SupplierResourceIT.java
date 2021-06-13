@@ -14,9 +14,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -51,8 +49,8 @@ public class SupplierResourceIT {
     private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_BY = "BBBBBBBBBB";
 
-    private static final Timestamp DEFAULT_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
-    private static final Timestamp UPDATED_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
+    private static final LocalDate DEFAULT_CREATED_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_CREATED_DATE = LocalDate.now(ZoneId.systemDefault());
 
     @Autowired
     private SupplierRepository supplierRepository;
@@ -124,6 +122,8 @@ public class SupplierResourceIT {
         assertThat(testSupplier.getContactNo()).isEqualTo(DEFAULT_CONTACT_NO);
         assertThat(testSupplier.getContactPerson()).isEqualTo(DEFAULT_CONTACT_PERSON);
         assertThat(testSupplier.getContactPersonNo()).isEqualTo(DEFAULT_CONTACT_PERSON_NO);
+        assertThat(testSupplier.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
+        assertThat(testSupplier.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
     }
 
     @Test
@@ -180,9 +180,11 @@ public class SupplierResourceIT {
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].contactNo").value(hasItem(DEFAULT_CONTACT_NO)))
             .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON)))
-            .andExpect(jsonPath("$.[*].contactPersonNo").value(hasItem(DEFAULT_CONTACT_PERSON_NO)));
+            .andExpect(jsonPath("$.[*].contactPersonNo").value(hasItem(DEFAULT_CONTACT_PERSON_NO)))
+            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
+            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getSupplier() throws Exception {
@@ -198,7 +200,9 @@ public class SupplierResourceIT {
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
             .andExpect(jsonPath("$.contactNo").value(DEFAULT_CONTACT_NO))
             .andExpect(jsonPath("$.contactPerson").value(DEFAULT_CONTACT_PERSON))
-            .andExpect(jsonPath("$.contactPersonNo").value(DEFAULT_CONTACT_PERSON_NO));
+            .andExpect(jsonPath("$.contactPersonNo").value(DEFAULT_CONTACT_PERSON_NO))
+            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
+            .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()));
     }
     @Test
     @Transactional
@@ -243,6 +247,8 @@ public class SupplierResourceIT {
         assertThat(testSupplier.getContactNo()).isEqualTo(UPDATED_CONTACT_NO);
         assertThat(testSupplier.getContactPerson()).isEqualTo(UPDATED_CONTACT_PERSON);
         assertThat(testSupplier.getContactPersonNo()).isEqualTo(UPDATED_CONTACT_PERSON_NO);
+        assertThat(testSupplier.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
+        assertThat(testSupplier.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
     }
 
     @Test

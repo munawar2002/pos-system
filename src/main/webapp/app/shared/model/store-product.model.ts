@@ -6,16 +6,7 @@ export interface IStoreProduct {
   storeId?: number;
   quantity?: number;
   createdBy?: string;
-  createdDate?: Moment;
+  createdDate?: string;
 }
 
-export class StoreProduct implements IStoreProduct {
-  constructor(
-    public id?: number,
-    public productId?: number,
-    public storeId?: number,
-    public quantity?: number,
-    public createdBy?: string,
-    public createdDate?: Moment
-  ) {}
-}
+export const defaultValue: Readonly<IStoreProduct> = {};

@@ -13,22 +13,7 @@ export interface IEmployee {
   photoContentType?: string;
   photo?: any;
   createdBy?: string;
-  createdDate?: Moment;
+  createdDate?: string;
 }
 
-export class Employee implements IEmployee {
-  constructor(
-    public id?: number,
-    public firstName?: string,
-    public lastName?: string,
-    public fullName?: string,
-    public jhiUserId?: number,
-    public address?: string,
-    public mobileNo?: string,
-    public designation?: Designation,
-    public photoContentType?: string,
-    public photo?: any,
-    public createdBy?: string,
-    public createdDate?: Moment
-  ) {}
-}
+export const defaultValue: Readonly<IEmployee> = {};

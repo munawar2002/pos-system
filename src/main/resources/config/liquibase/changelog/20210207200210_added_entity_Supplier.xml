@@ -34,8 +34,8 @@
             <column name="created_by" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false" />
+            <column name="created_date" type="date">
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -66,7 +66,7 @@
             <column name="contact_person" type="string"/>
             <column name="contact_person_no" type="string"/>
             <column name="created_by" type="string"/>
-            <column name="created_date" type="timestamp" />
+            <column name="created_date" type="date"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

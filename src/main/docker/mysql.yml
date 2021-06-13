@@ -7,7 +7,6 @@ services:
     environment:
       - MYSQL_USER=root
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_ROOT_PASSWORD=str0ng
       - MYSQL_DATABASE=possystem
     ports:
       - 3306:3306

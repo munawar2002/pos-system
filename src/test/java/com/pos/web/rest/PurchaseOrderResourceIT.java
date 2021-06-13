@@ -1,11 +1,8 @@
 package com.pos.web.rest;
 
 import com.pos.PosSystemApp;
-import com.pos.SampleObjects;
 import com.pos.domain.PurchaseOrder;
-import com.pos.domain.Supplier;
 import com.pos.repository.PurchaseOrderRepository;
-import com.pos.repository.SupplierRepository;
 import com.pos.service.PurchaseOrderService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,9 +15,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -61,8 +56,8 @@ public class PurchaseOrderResourceIT {
     private static final Boolean DEFAULT_SHIPPING_REQUIRED = false;
     private static final Boolean UPDATED_SHIPPING_REQUIRED = true;
 
-    private static final Timestamp DEFAULT_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
-    private static final Timestamp UPDATED_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
+    private static final LocalDate DEFAULT_CREATED_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_CREATED_DATE = LocalDate.now(ZoneId.systemDefault());
 
     private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_BY = "BBBBBBBBBB";
@@ -75,9 +70,6 @@ public class PurchaseOrderResourceIT {
 
     @Autowired
     private PurchaseOrderService purchaseOrderService;
-
-    @Autowired
-    private SupplierRepository supplierRepository;
 
     @Autowired
     private EntityManager em;
@@ -93,12 +85,9 @@ public class PurchaseOrderResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public PurchaseOrder createEntity(EntityManager em) {
-        Supplier supplier = SampleObjects.getSupplier();
-        supplierRepository.save(supplier);
-
+    public static PurchaseOrder createEntity(EntityManager em) {
         PurchaseOrder purchaseOrder = new PurchaseOrder()
-            .supplier(supplier)
+            .supplierId(DEFAULT_SUPPLIER_ID)
             .totalAmount(DEFAULT_TOTAL_AMOUNT)
             .paymentType(DEFAULT_PAYMENT_TYPE)
             .orderStatus(DEFAULT_ORDER_STATUS)
@@ -116,12 +105,9 @@ public class PurchaseOrderResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public PurchaseOrder createUpdatedEntity(EntityManager em) {
-        Supplier supplier = SampleObjects.getSupplier();
-        supplierRepository.save(supplier);
-
+    public static PurchaseOrder createUpdatedEntity(EntityManager em) {
         PurchaseOrder purchaseOrder = new PurchaseOrder()
-            .supplier(supplier)
+            .supplierId(UPDATED_SUPPLIER_ID)
             .totalAmount(UPDATED_TOTAL_AMOUNT)
             .paymentType(UPDATED_PAYMENT_TYPE)
             .orderStatus(UPDATED_ORDER_STATUS)
@@ -153,12 +139,14 @@ public class PurchaseOrderResourceIT {
         List<PurchaseOrder> purchaseOrderList = purchaseOrderRepository.findAll();
         assertThat(purchaseOrderList).hasSize(databaseSizeBeforeCreate + 1);
         PurchaseOrder testPurchaseOrder = purchaseOrderList.get(purchaseOrderList.size() - 1);
+        assertThat(testPurchaseOrder.getSupplierId()).isEqualTo(DEFAULT_SUPPLIER_ID);
         assertThat(testPurchaseOrder.getTotalAmount()).isEqualTo(DEFAULT_TOTAL_AMOUNT);
         assertThat(testPurchaseOrder.getPaymentType()).isEqualTo(DEFAULT_PAYMENT_TYPE);
         assertThat(testPurchaseOrder.getOrderStatus()).isEqualTo(DEFAULT_ORDER_STATUS);
         assertThat(testPurchaseOrder.getPaymentStatus()).isEqualTo(DEFAULT_PAYMENT_STATUS);
         assertThat(testPurchaseOrder.getShippingDate()).isEqualTo(DEFAULT_SHIPPING_DATE);
         assertThat(testPurchaseOrder.isShippingRequired()).isEqualTo(DEFAULT_SHIPPING_REQUIRED);
+        assertThat(testPurchaseOrder.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testPurchaseOrder.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
         assertThat(testPurchaseOrder.getRemarks()).isEqualTo(DEFAULT_REMARKS);
     }
@@ -213,16 +201,18 @@ public class PurchaseOrderResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(purchaseOrder.getId().intValue())))
+            .andExpect(jsonPath("$.[*].supplierId").value(hasItem(DEFAULT_SUPPLIER_ID.intValue())))
             .andExpect(jsonPath("$.[*].totalAmount").value(hasItem(DEFAULT_TOTAL_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].paymentType").value(hasItem(DEFAULT_PAYMENT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].orderStatus").value(hasItem(DEFAULT_ORDER_STATUS.toString())))
             .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].shippingDate").value(hasItem(DEFAULT_SHIPPING_DATE.toString())))
             .andExpect(jsonPath("$.[*].shippingRequired").value(hasItem(DEFAULT_SHIPPING_REQUIRED.booleanValue())))
+            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS)));
     }
-
+    
     @Test
     @Transactional
     public void getPurchaseOrder() throws Exception {
@@ -234,12 +224,14 @@ public class PurchaseOrderResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(purchaseOrder.getId().intValue()))
+            .andExpect(jsonPath("$.supplierId").value(DEFAULT_SUPPLIER_ID.intValue()))
             .andExpect(jsonPath("$.totalAmount").value(DEFAULT_TOTAL_AMOUNT.doubleValue()))
             .andExpect(jsonPath("$.paymentType").value(DEFAULT_PAYMENT_TYPE.toString()))
             .andExpect(jsonPath("$.orderStatus").value(DEFAULT_ORDER_STATUS.toString()))
             .andExpect(jsonPath("$.paymentStatus").value(DEFAULT_PAYMENT_STATUS.toString()))
             .andExpect(jsonPath("$.shippingDate").value(DEFAULT_SHIPPING_DATE.toString()))
             .andExpect(jsonPath("$.shippingRequired").value(DEFAULT_SHIPPING_REQUIRED.booleanValue()))
+            .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()))
             .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
             .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS));
     }
@@ -263,10 +255,8 @@ public class PurchaseOrderResourceIT {
         PurchaseOrder updatedPurchaseOrder = purchaseOrderRepository.findById(purchaseOrder.getId()).get();
         // Disconnect from session so that the updates on updatedPurchaseOrder are not directly saved in db
         em.detach(updatedPurchaseOrder);
-        Supplier supplier = SampleObjects.getSupplier();
-        supplierRepository.save(supplier);
         updatedPurchaseOrder
-            .supplier(supplier)
+            .supplierId(UPDATED_SUPPLIER_ID)
             .totalAmount(UPDATED_TOTAL_AMOUNT)
             .paymentType(UPDATED_PAYMENT_TYPE)
             .orderStatus(UPDATED_ORDER_STATUS)
@@ -286,12 +276,14 @@ public class PurchaseOrderResourceIT {
         List<PurchaseOrder> purchaseOrderList = purchaseOrderRepository.findAll();
         assertThat(purchaseOrderList).hasSize(databaseSizeBeforeUpdate);
         PurchaseOrder testPurchaseOrder = purchaseOrderList.get(purchaseOrderList.size() - 1);
+        assertThat(testPurchaseOrder.getSupplierId()).isEqualTo(UPDATED_SUPPLIER_ID);
         assertThat(testPurchaseOrder.getTotalAmount()).isEqualTo(UPDATED_TOTAL_AMOUNT);
         assertThat(testPurchaseOrder.getPaymentType()).isEqualTo(UPDATED_PAYMENT_TYPE);
         assertThat(testPurchaseOrder.getOrderStatus()).isEqualTo(UPDATED_ORDER_STATUS);
         assertThat(testPurchaseOrder.getPaymentStatus()).isEqualTo(UPDATED_PAYMENT_STATUS);
         assertThat(testPurchaseOrder.getShippingDate()).isEqualTo(UPDATED_SHIPPING_DATE);
         assertThat(testPurchaseOrder.isShippingRequired()).isEqualTo(UPDATED_SHIPPING_REQUIRED);
+        assertThat(testPurchaseOrder.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testPurchaseOrder.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
         assertThat(testPurchaseOrder.getRemarks()).isEqualTo(UPDATED_REMARKS);
     }

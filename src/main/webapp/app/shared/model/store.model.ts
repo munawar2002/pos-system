@@ -7,19 +7,9 @@ export interface IStore {
   managedBy?: number;
   active?: boolean;
   createdBy?: string;
-  createdDate?: Moment;
+  createdDate?: string;
 }
 
-export class Store implements IStore {
-  constructor(
-    public id?: number,
-    public name?: string,
-    public address?: string,
-    public managedBy?: number,
-    public active?: boolean,
-    public createdBy?: string,
-    public createdDate?: Moment
-  ) {
-    this.active = this.active || false;
-  }
-}
+export const defaultValue: Readonly<IStore> = {
+  active: false,
+};

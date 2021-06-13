@@ -1,9 +1,7 @@
 package com.pos.web.rest;
 
 import com.pos.domain.Product;
-import com.pos.domain.dto.ProductDto;
 import com.pos.repository.ProductRepository;
-import com.pos.service.ProductService;
 import com.pos.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -11,7 +9,6 @@ import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,50 +42,47 @@ public class ProductResource {
 
     private final ProductRepository productRepository;
 
-    @Autowired
-    private ProductService productService;
-
     public ProductResource(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     /**
-     * {@code POST  /products} : Create a new productDto.
+     * {@code POST  /products} : Create a new product.
      *
-     * @param productDto the productDto to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new productDto, or with status {@code 400 (Bad Request)} if the productDto has already an ID.
+     * @param product the product to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new product, or with status {@code 400 (Bad Request)} if the product has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/products")
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDto productDto) throws URISyntaxException {
-        log.debug("REST request to save Product : {}", productDto);
-        if (productDto.getId() != null) {
-            throw new BadRequestAlertException("A new productDto cannot already have an ID", ENTITY_NAME, "idexists");
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) throws URISyntaxException {
+        log.debug("REST request to save Product : {}", product);
+        if (product.getId() != null) {
+            throw new BadRequestAlertException("A new product cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Product result = productService.saveProduct(productDto);
+        Product result = productRepository.save(product);
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /products} : Updates an existing productDto.
+     * {@code PUT  /products} : Updates an existing product.
      *
-     * @param productDto the productDto to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated productDto,
-     * or with status {@code 400 (Bad Request)} if the productDto is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the productDto couldn't be updated.
+     * @param product the product to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated product,
+     * or with status {@code 400 (Bad Request)} if the product is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the product couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/products")
-    public ResponseEntity<Product> updateProduct(@Valid @RequestBody ProductDto productDto) throws URISyntaxException {
-        log.debug("REST request to update Product : {}", productDto);
-        if (productDto.getId() == null) {
+    public ResponseEntity<Product> updateProduct(@Valid @RequestBody Product product) throws URISyntaxException {
+        log.debug("REST request to update Product : {}", product);
+        if (product.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Product result = productService.saveProduct(productDto);
+        Product result = productRepository.save(product);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, productDto.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, product.getId().toString()))
             .body(result);
     }
 

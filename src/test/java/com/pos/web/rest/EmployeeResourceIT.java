@@ -15,9 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -64,8 +62,8 @@ public class EmployeeResourceIT {
     private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_BY = "BBBBBBBBBB";
 
-    private static final Timestamp DEFAULT_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
-    private static final Timestamp UPDATED_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
+    private static final LocalDate DEFAULT_CREATED_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_CREATED_DATE = LocalDate.now(ZoneId.systemDefault());
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -149,6 +147,8 @@ public class EmployeeResourceIT {
         assertThat(testEmployee.getDesignation()).isEqualTo(DEFAULT_DESIGNATION);
         assertThat(testEmployee.getPhoto()).isEqualTo(DEFAULT_PHOTO);
         assertThat(testEmployee.getPhotoContentType()).isEqualTo(DEFAULT_PHOTO_CONTENT_TYPE);
+        assertThat(testEmployee.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
+        assertThat(testEmployee.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
     }
 
     @Test
@@ -266,9 +266,11 @@ public class EmployeeResourceIT {
             .andExpect(jsonPath("$.[*].mobileNo").value(hasItem(DEFAULT_MOBILE_NO)))
             .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION.toString())))
             .andExpect(jsonPath("$.[*].photoContentType").value(hasItem(DEFAULT_PHOTO_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))));
+            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))))
+            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
+            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getEmployee() throws Exception {
@@ -288,7 +290,9 @@ public class EmployeeResourceIT {
             .andExpect(jsonPath("$.mobileNo").value(DEFAULT_MOBILE_NO))
             .andExpect(jsonPath("$.designation").value(DEFAULT_DESIGNATION.toString()))
             .andExpect(jsonPath("$.photoContentType").value(DEFAULT_PHOTO_CONTENT_TYPE))
-            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)));
+            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)))
+            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
+            .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()));
     }
     @Test
     @Transactional
@@ -341,6 +345,8 @@ public class EmployeeResourceIT {
         assertThat(testEmployee.getDesignation()).isEqualTo(UPDATED_DESIGNATION);
         assertThat(testEmployee.getPhoto()).isEqualTo(UPDATED_PHOTO);
         assertThat(testEmployee.getPhotoContentType()).isEqualTo(UPDATED_PHOTO_CONTENT_TYPE);
+        assertThat(testEmployee.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
+        assertThat(testEmployee.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
     }
 
     @Test

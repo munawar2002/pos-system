@@ -25,7 +25,7 @@
     "embeddableLaunchScript": false,
     "useSass": true,
     "clientPackageManager": "npm",
-    "clientFramework": "angularX",
+    "clientFramework": "react",
     "clientTheme": "none",
     "clientThemeVariant": "",
     "creationTimestamp": 1612568835808,
