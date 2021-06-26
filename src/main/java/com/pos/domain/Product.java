@@ -1,13 +1,14 @@
 package com.pos.domain;
 
+import com.pos.domain.dto.ProductDto;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 /**
  * A Product.
@@ -31,11 +32,13 @@ public class Product implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "category_id")
-    private Long categoryId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private ProductCategory category;
 
-    @Column(name = "supplier_id")
-    private Long supplierId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_company_id")
+    private ProductCompany productCompany;
 
     @Column(name = "buy_price")
     private Double buyPrice;
@@ -54,7 +57,7 @@ public class Product implements Serializable {
     private String createdBy;
 
     @Column(name = "created_date")
-    private LocalDate createdDate;
+    private Timestamp createdDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -91,30 +94,30 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public ProductCategory getCategory() {
+        return category;
     }
 
-    public Product categoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public Product category(ProductCategory category) {
+        this.category = category;
         return this;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(ProductCategory category) {
+        this.category = category;
     }
 
-    public Long getSupplierId() {
-        return supplierId;
+    public ProductCompany getProductCompany() {
+        return productCompany;
     }
 
-    public Product supplierId(Long supplierId) {
-        this.supplierId = supplierId;
+    public Product productCompany(ProductCompany productCompany) {
+        this.productCompany = productCompany;
         return this;
     }
 
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
+    public void setProductCompany(ProductCompany productCompany) {
+        this.productCompany = productCompany;
     }
 
     public Double getBuyPrice() {
@@ -182,16 +185,16 @@ public class Product implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public LocalDate getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public Product createdDate(LocalDate createdDate) {
+    public Product createdDate(Timestamp createdDate) {
         this.createdDate = createdDate;
         return this;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -207,6 +210,18 @@ public class Product implements Serializable {
         return id != null && id.equals(((Product) o).id);
     }
 
+    public ProductDto toProductDto(){
+        ProductDto productDto = new ProductDto();
+        BeanUtils.copyProperties(this,productDto);
+        if(getCategory()!= null) {
+            productDto.setCategoryId(getCategory().getId());
+        }
+        if(getProductCompany()!= null){
+            productDto.setProductCompanyId(getProductCompany().getId());
+        }
+        return productDto;
+    }
+
     @Override
     public int hashCode() {
         return 31;
@@ -215,16 +230,22 @@ public class Product implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+        String categoryName = getCategory()!=null?
+            getCategory().getName()!=null?
+                getCategory().getName() : "" : "";
+
+        String productCompany = getProductCompany()!=null?
+            getProductCompany().getName()!=null?
+                getProductCompany().getName() : "" : "";
+
         return "Product{" +
             "id=" + getId() +
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
-            ", categoryId=" + getCategoryId() +
-            ", supplierId=" + getSupplierId() +
+            ", category=" + categoryName +
+            ", productCompany=" + productCompany +
             ", buyPrice=" + getBuyPrice() +
             ", sellPrice=" + getSellPrice() +
-            ", photo='" + getPhoto() + "'" +
-            ", photoContentType='" + getPhotoContentType() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
             "}";

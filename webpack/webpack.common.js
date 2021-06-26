@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
+const packageJson = require('./../package.json');
 const utils = require('./utils.js');
 
 const getTsLoaderRule = env => {
@@ -10,7 +12,7 @@ const getTsLoaderRule = env => {
     {
       loader: 'cache-loader',
       options: {
-        cacheDirectory: path.resolve('target/cache-loader')
+        cacheDirectory: path.resolve('build/cache-loader')
       }
     },
     {
@@ -95,8 +97,7 @@ module.exports = options => ({
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: `'${options.env}'`,
-        // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
-        VERSION: `'${process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV'}'`,
+        VERSION: `'${packageJson.version}'`,
         DEBUG_INFO_ENABLED: options.env === 'development',
         // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
         // If this URL is left empty (""), then it will be relative to the current context.

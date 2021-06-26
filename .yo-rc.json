@@ -36,6 +36,7 @@
     "otherModules": [],
     "enableTranslation": false,
     "blueprints": [],
-    "lastLiquibaseTimestamp": 1619228802000
+    "lastLiquibaseTimestamp": 1619228802000,
+    "skipServer": true
   }
 }
