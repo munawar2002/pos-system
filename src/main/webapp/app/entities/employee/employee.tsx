@@ -16,7 +16,6 @@ export const Employee = (props: IEmployeeProps) => {
   useEffect(() => {
     props.getEntities();
   }, []);
-
   const { employeeList, match, loading } = props;
   return (
     <div>

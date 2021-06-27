@@ -1,9 +1,13 @@
 package com.pos.web.rest;
 
 import com.pos.PosSystemApp;
+import com.pos.SampleObjects;
 import com.pos.domain.PurchaseInvoice;
+import com.pos.domain.Supplier;
+import com.pos.domain.enumeration.OrderStatus;
+import com.pos.domain.enumeration.PaymentType;
 import com.pos.repository.PurchaseInvoiceRepository;
-
+import com.pos.repository.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +17,16 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import com.pos.domain.enumeration.PaymentType;
-import com.pos.domain.enumeration.OrderStatus;
 /**
  * Integration tests for the {@link PurchaseInvoiceResource} REST controller.
  */
@@ -66,8 +68,8 @@ public class PurchaseInvoiceResourceIT {
     private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_BY = "BBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_CREATED_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_CREATED_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final Timestamp DEFAULT_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
+    private static final Timestamp UPDATED_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
 
     @Autowired
     private PurchaseInvoiceRepository purchaseInvoiceRepository;
@@ -78,6 +80,9 @@ public class PurchaseInvoiceResourceIT {
     @Autowired
     private MockMvc restPurchaseInvoiceMockMvc;
 
+    @Autowired
+    private SupplierRepository supplierRepository;
+
     private PurchaseInvoice purchaseInvoice;
 
     /**
@@ -86,9 +91,13 @@ public class PurchaseInvoiceResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static PurchaseInvoice createEntity(EntityManager em) {
+    public PurchaseInvoice createEntity(EntityManager em) {
+
+        Supplier supplier = SampleObjects.getSupplier();
+        supplierRepository.save(supplier);
+
         PurchaseInvoice purchaseInvoice = new PurchaseInvoice()
-            .supplierId(DEFAULT_SUPPLIER_ID)
+            .supplier(supplier)
             .paymentType(DEFAULT_PAYMENT_TYPE)
             .purchaseOrderId(DEFAULT_PURCHASE_ORDER_ID)
             .invoiceStatus(DEFAULT_INVOICE_STATUS)
@@ -108,9 +117,13 @@ public class PurchaseInvoiceResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static PurchaseInvoice createUpdatedEntity(EntityManager em) {
+    public PurchaseInvoice createUpdatedEntity(EntityManager em) {
+
+        Supplier supplier = SampleObjects.getSupplier();
+        supplierRepository.save(supplier);
+
         PurchaseInvoice purchaseInvoice = new PurchaseInvoice()
-            .supplierId(UPDATED_SUPPLIER_ID)
+            .supplier(supplier)
             .paymentType(UPDATED_PAYMENT_TYPE)
             .purchaseOrderId(UPDATED_PURCHASE_ORDER_ID)
             .invoiceStatus(UPDATED_INVOICE_STATUS)
@@ -144,7 +157,6 @@ public class PurchaseInvoiceResourceIT {
         List<PurchaseInvoice> purchaseInvoiceList = purchaseInvoiceRepository.findAll();
         assertThat(purchaseInvoiceList).hasSize(databaseSizeBeforeCreate + 1);
         PurchaseInvoice testPurchaseInvoice = purchaseInvoiceList.get(purchaseInvoiceList.size() - 1);
-        assertThat(testPurchaseInvoice.getSupplierId()).isEqualTo(DEFAULT_SUPPLIER_ID);
         assertThat(testPurchaseInvoice.getPaymentType()).isEqualTo(DEFAULT_PAYMENT_TYPE);
         assertThat(testPurchaseInvoice.getPurchaseOrderId()).isEqualTo(DEFAULT_PURCHASE_ORDER_ID);
         assertThat(testPurchaseInvoice.getInvoiceStatus()).isEqualTo(DEFAULT_INVOICE_STATUS);
@@ -155,7 +167,6 @@ public class PurchaseInvoiceResourceIT {
         assertThat(testPurchaseInvoice.getDiscountPercentage()).isEqualTo(DEFAULT_DISCOUNT_PERCENTAGE);
         assertThat(testPurchaseInvoice.getDiscountAmount()).isEqualTo(DEFAULT_DISCOUNT_AMOUNT);
         assertThat(testPurchaseInvoice.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
-        assertThat(testPurchaseInvoice.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
     }
 
     @Test
@@ -189,7 +200,6 @@ public class PurchaseInvoiceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(purchaseInvoice.getId().intValue())))
-            .andExpect(jsonPath("$.[*].supplierId").value(hasItem(DEFAULT_SUPPLIER_ID.intValue())))
             .andExpect(jsonPath("$.[*].paymentType").value(hasItem(DEFAULT_PAYMENT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].purchaseOrderId").value(hasItem(DEFAULT_PURCHASE_ORDER_ID.intValue())))
             .andExpect(jsonPath("$.[*].invoiceStatus").value(hasItem(DEFAULT_INVOICE_STATUS.toString())))
@@ -199,10 +209,9 @@ public class PurchaseInvoiceResourceIT {
             .andExpect(jsonPath("$.[*].discountAvailed").value(hasItem(DEFAULT_DISCOUNT_AVAILED.booleanValue())))
             .andExpect(jsonPath("$.[*].discountPercentage").value(hasItem(DEFAULT_DISCOUNT_PERCENTAGE)))
             .andExpect(jsonPath("$.[*].discountAmount").value(hasItem(DEFAULT_DISCOUNT_AMOUNT.doubleValue())))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
-            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)));
     }
-    
+
     @Test
     @Transactional
     public void getPurchaseInvoice() throws Exception {
@@ -214,7 +223,6 @@ public class PurchaseInvoiceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(purchaseInvoice.getId().intValue()))
-            .andExpect(jsonPath("$.supplierId").value(DEFAULT_SUPPLIER_ID.intValue()))
             .andExpect(jsonPath("$.paymentType").value(DEFAULT_PAYMENT_TYPE.toString()))
             .andExpect(jsonPath("$.purchaseOrderId").value(DEFAULT_PURCHASE_ORDER_ID.intValue()))
             .andExpect(jsonPath("$.invoiceStatus").value(DEFAULT_INVOICE_STATUS.toString()))
@@ -224,8 +232,7 @@ public class PurchaseInvoiceResourceIT {
             .andExpect(jsonPath("$.discountAvailed").value(DEFAULT_DISCOUNT_AVAILED.booleanValue()))
             .andExpect(jsonPath("$.discountPercentage").value(DEFAULT_DISCOUNT_PERCENTAGE))
             .andExpect(jsonPath("$.discountAmount").value(DEFAULT_DISCOUNT_AMOUNT.doubleValue()))
-            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
-            .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()));
+            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY));
     }
     @Test
     @Transactional
@@ -247,8 +254,11 @@ public class PurchaseInvoiceResourceIT {
         PurchaseInvoice updatedPurchaseInvoice = purchaseInvoiceRepository.findById(purchaseInvoice.getId()).get();
         // Disconnect from session so that the updates on updatedPurchaseInvoice are not directly saved in db
         em.detach(updatedPurchaseInvoice);
+        Supplier supplier = SampleObjects.getSupplier();
+        supplierRepository.save(supplier);
+
         updatedPurchaseInvoice
-            .supplierId(UPDATED_SUPPLIER_ID)
+            .supplier(supplier)
             .paymentType(UPDATED_PAYMENT_TYPE)
             .purchaseOrderId(UPDATED_PURCHASE_ORDER_ID)
             .invoiceStatus(UPDATED_INVOICE_STATUS)
@@ -270,7 +280,6 @@ public class PurchaseInvoiceResourceIT {
         List<PurchaseInvoice> purchaseInvoiceList = purchaseInvoiceRepository.findAll();
         assertThat(purchaseInvoiceList).hasSize(databaseSizeBeforeUpdate);
         PurchaseInvoice testPurchaseInvoice = purchaseInvoiceList.get(purchaseInvoiceList.size() - 1);
-        assertThat(testPurchaseInvoice.getSupplierId()).isEqualTo(UPDATED_SUPPLIER_ID);
         assertThat(testPurchaseInvoice.getPaymentType()).isEqualTo(UPDATED_PAYMENT_TYPE);
         assertThat(testPurchaseInvoice.getPurchaseOrderId()).isEqualTo(UPDATED_PURCHASE_ORDER_ID);
         assertThat(testPurchaseInvoice.getInvoiceStatus()).isEqualTo(UPDATED_INVOICE_STATUS);
@@ -281,7 +290,6 @@ public class PurchaseInvoiceResourceIT {
         assertThat(testPurchaseInvoice.getDiscountPercentage()).isEqualTo(UPDATED_DISCOUNT_PERCENTAGE);
         assertThat(testPurchaseInvoice.getDiscountAmount()).isEqualTo(UPDATED_DISCOUNT_AMOUNT);
         assertThat(testPurchaseInvoice.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testPurchaseInvoice.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
     }
 
     @Test

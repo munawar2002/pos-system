@@ -4,10 +4,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.sql.Timestamp;
 
 /**
  * A ProductCategory.
@@ -32,7 +31,7 @@ public class ProductCategory implements Serializable {
 
     @NotNull
     @Column(name = "creation_date", nullable = false)
-    private ZonedDateTime creationDate;
+    private Timestamp creationDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -69,16 +68,16 @@ public class ProductCategory implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public ZonedDateTime getCreationDate() {
+    public Timestamp getCreationDate() {
         return creationDate;
     }
 
-    public ProductCategory creationDate(ZonedDateTime creationDate) {
+    public ProductCategory creationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
         return this;
     }
 
-    public void setCreationDate(ZonedDateTime creationDate) {
+    public void setCreationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

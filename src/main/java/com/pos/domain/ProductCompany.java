@@ -4,9 +4,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 /**
  * A ProductCompany.
@@ -41,7 +40,7 @@ public class ProductCompany implements Serializable {
     private String createdBy;
 
     @Column(name = "created_date")
-    private LocalDate createdDate;
+    private Timestamp createdDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -130,16 +129,16 @@ public class ProductCompany implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public LocalDate getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public ProductCompany createdDate(LocalDate createdDate) {
+    public ProductCompany createdDate(Timestamp createdDate) {
         this.createdDate = createdDate;
         return this;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

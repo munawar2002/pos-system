@@ -1,9 +1,12 @@
 package com.pos.web.rest;
 
 import com.pos.PosSystemApp;
+import com.pos.SampleObjects;
+import com.pos.domain.Employee;
 import com.pos.domain.Store;
+import com.pos.domain.dto.StoreDto;
+import com.pos.repository.EmployeeRepository;
 import com.pos.repository.StoreRepository;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,17 +41,14 @@ public class StoreResourceIT {
     private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
 
-    private static final Long DEFAULT_MANAGED_BY = 1L;
-    private static final Long UPDATED_MANAGED_BY = 2L;
-
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
 
     private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_BY = "BBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_CREATED_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_CREATED_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final Timestamp DEFAULT_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
+    private static final Timestamp UPDATED_CREATED_DATE = Timestamp.valueOf(LocalDateTime.now());
 
     @Autowired
     private StoreRepository storeRepository;
@@ -58,6 +59,9 @@ public class StoreResourceIT {
     @Autowired
     private MockMvc restStoreMockMvc;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     private Store store;
 
     /**
@@ -66,11 +70,13 @@ public class StoreResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Store createEntity(EntityManager em) {
+    public Store createEntity(EntityManager em) {
+        Employee emp = SampleObjects.getEmployee();
+        emp = employeeRepository.save(emp);
         Store store = new Store()
             .name(DEFAULT_NAME)
             .address(DEFAULT_ADDRESS)
-            .managedBy(DEFAULT_MANAGED_BY)
+            .managedBy(emp)
             .active(DEFAULT_ACTIVE)
             .createdBy(DEFAULT_CREATED_BY)
             .createdDate(DEFAULT_CREATED_DATE);
@@ -82,11 +88,13 @@ public class StoreResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Store createUpdatedEntity(EntityManager em) {
+    public Store createUpdatedEntity(EntityManager em) {
+        Employee emp = SampleObjects.getEmployee();
+        emp = employeeRepository.save(emp);
         Store store = new Store()
             .name(UPDATED_NAME)
             .address(UPDATED_ADDRESS)
-            .managedBy(UPDATED_MANAGED_BY)
+            .managedBy(emp)
             .active(UPDATED_ACTIVE)
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE);
@@ -102,10 +110,13 @@ public class StoreResourceIT {
     @Transactional
     public void createStore() throws Exception {
         int databaseSizeBeforeCreate = storeRepository.findAll().size();
+
+        StoreDto storeDto = store.toStoreDto();
+
         // Create the Store
         restStoreMockMvc.perform(post("/api/stores")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(store)))
+            .content(TestUtil.convertObjectToJsonBytes(storeDto)))
             .andExpect(status().isCreated());
 
         // Validate the Store in the database
@@ -114,10 +125,9 @@ public class StoreResourceIT {
         Store testStore = storeList.get(storeList.size() - 1);
         assertThat(testStore.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testStore.getAddress()).isEqualTo(DEFAULT_ADDRESS);
-        assertThat(testStore.getManagedBy()).isEqualTo(DEFAULT_MANAGED_BY);
+        assertThat(testStore.getManagedBy().getFullName())
+            .isEqualTo(SampleObjects.getEmployee().getFullName());
         assertThat(testStore.isActive()).isEqualTo(DEFAULT_ACTIVE);
-        assertThat(testStore.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
-        assertThat(testStore.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
     }
 
     @Test
@@ -164,7 +174,7 @@ public class StoreResourceIT {
     public void checkActiveIsRequired() throws Exception {
         int databaseSizeBeforeTest = storeRepository.findAll().size();
         // set the field null
-        store.setActive(null);
+        store.setActive(true);
 
         // Create the Store, which fails.
 
@@ -191,12 +201,9 @@ public class StoreResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(store.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
-            .andExpect(jsonPath("$.[*].managedBy").value(hasItem(DEFAULT_MANAGED_BY.intValue())))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
-            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getStore() throws Exception {
@@ -210,10 +217,7 @@ public class StoreResourceIT {
             .andExpect(jsonPath("$.id").value(store.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
-            .andExpect(jsonPath("$.managedBy").value(DEFAULT_MANAGED_BY.intValue()))
-            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
-            .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()));
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
     @Test
     @Transactional
@@ -234,18 +238,24 @@ public class StoreResourceIT {
         // Update the store
         Store updatedStore = storeRepository.findById(store.getId()).get();
         // Disconnect from session so that the updates on updatedStore are not directly saved in db
+
+        Employee emp = SampleObjects.getEmployee();
+        emp = employeeRepository.save(emp);
+
         em.detach(updatedStore);
         updatedStore
             .name(UPDATED_NAME)
             .address(UPDATED_ADDRESS)
-            .managedBy(UPDATED_MANAGED_BY)
+            .managedBy(emp)
             .active(UPDATED_ACTIVE)
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE);
 
+        StoreDto storeDto = updatedStore.toStoreDto();
+
         restStoreMockMvc.perform(put("/api/stores")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedStore)))
+            .content(TestUtil.convertObjectToJsonBytes(storeDto)))
             .andExpect(status().isOk());
 
         // Validate the Store in the database
@@ -254,10 +264,9 @@ public class StoreResourceIT {
         Store testStore = storeList.get(storeList.size() - 1);
         assertThat(testStore.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testStore.getAddress()).isEqualTo(UPDATED_ADDRESS);
-        assertThat(testStore.getManagedBy()).isEqualTo(UPDATED_MANAGED_BY);
+        assertThat(testStore.getManagedBy().getFullName())
+            .isEqualTo(SampleObjects.getEmployee().getFullName());
         assertThat(testStore.isActive()).isEqualTo(UPDATED_ACTIVE);
-        assertThat(testStore.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testStore.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
     }
 
     @Test

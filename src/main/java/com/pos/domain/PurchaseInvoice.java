@@ -5,12 +5,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
 import com.pos.domain.enumeration.PaymentType;
 
 import com.pos.domain.enumeration.OrderStatus;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * A PurchaseInvoice.
@@ -26,8 +26,9 @@ public class PurchaseInvoice implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "supplier_id")
-    private Long supplierId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_type")
@@ -62,7 +63,7 @@ public class PurchaseInvoice implements Serializable {
     private String createdBy;
 
     @Column(name = "created_date")
-    private LocalDate createdDate;
+    private Timestamp createdDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -73,17 +74,17 @@ public class PurchaseInvoice implements Serializable {
         this.id = id;
     }
 
-    public Long getSupplierId() {
-        return supplierId;
-    }
-
-    public PurchaseInvoice supplierId(Long supplierId) {
-        this.supplierId = supplierId;
+    public PurchaseInvoice supplier(Supplier supplier) {
+        this.supplier = supplier;
         return this;
     }
 
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     public PaymentType getPaymentType() {
@@ -216,16 +217,16 @@ public class PurchaseInvoice implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public LocalDate getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public PurchaseInvoice createdDate(LocalDate createdDate) {
+    public PurchaseInvoice createdDate(Timestamp createdDate) {
         this.createdDate = createdDate;
         return this;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -249,9 +250,13 @@ public class PurchaseInvoice implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+        String supplierName = "";
+        if(getSupplier() != null){
+            supplierName = getSupplier().getName();
+        }
         return "PurchaseInvoice{" +
             "id=" + getId() +
-            ", supplierId=" + getSupplierId() +
+            ", supplierName=" + supplierName +
             ", paymentType='" + getPaymentType() + "'" +
             ", purchaseOrderId=" + getPurchaseOrderId() +
             ", invoiceStatus='" + getInvoiceStatus() + "'" +

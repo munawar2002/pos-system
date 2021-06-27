@@ -14,10 +14,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.ZoneOffset;
-import java.time.ZoneId;
+import java.sql.Timestamp;
+import java.time.*;
 import java.util.List;
 
 import static com.pos.web.rest.TestUtil.sameInstant;
@@ -40,8 +38,8 @@ public class ProductCategoryResourceIT {
     private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_BY = "BBBBBBBBBB";
 
-    private static final ZonedDateTime DEFAULT_CREATION_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_CREATION_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final Timestamp DEFAULT_CREATION_DATE = Timestamp.valueOf(LocalDateTime.now());
+    private static final Timestamp UPDATED_CREATION_DATE = Timestamp.valueOf(LocalDateTime.now());
 
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
@@ -101,8 +99,6 @@ public class ProductCategoryResourceIT {
         assertThat(productCategoryList).hasSize(databaseSizeBeforeCreate + 1);
         ProductCategory testProductCategory = productCategoryList.get(productCategoryList.size() - 1);
         assertThat(testProductCategory.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testProductCategory.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
-        assertThat(testProductCategory.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
     }
 
     @Test
@@ -174,11 +170,9 @@ public class ProductCategoryResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(productCategory.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
-            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
-    
+
     @Test
     @Transactional
     public void getProductCategory() throws Exception {
@@ -190,9 +184,7 @@ public class ProductCategoryResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(productCategory.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
-            .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
     }
     @Test
     @Transactional
@@ -229,8 +221,6 @@ public class ProductCategoryResourceIT {
         assertThat(productCategoryList).hasSize(databaseSizeBeforeUpdate);
         ProductCategory testProductCategory = productCategoryList.get(productCategoryList.size() - 1);
         assertThat(testProductCategory.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testProductCategory.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testProductCategory.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
     }
 
     @Test

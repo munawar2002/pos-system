@@ -6,10 +6,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 
 /**
  * A StoreProduct.
