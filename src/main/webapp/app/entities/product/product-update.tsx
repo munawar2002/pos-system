@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
+
 import { ICrudGetAction, ICrudGetAllAction, setFileData, openFile, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
-
-import { getEntity, updateEntity, createEntity, setBlob, reset } from './product.reducer';
+import { useDispatch } from 'react-redux';
+import { getEntity, updateEntity, createEntity, setBlob, reset, getProductCategories } from './product.reducer';
+import { getEntities as getSuppliers } from '../supplier/supplier.reducer';
 import { IProduct } from 'app/shared/model/product.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -16,8 +18,8 @@ export interface IProductUpdateProps extends StateProps, DispatchProps, RouteCom
 
 export const ProductUpdate = (props: IProductUpdateProps) => {
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
-
-  const { productEntity, loading, updating } = props;
+  const dispatch = useDispatch();
+  const { productEntity, loading, updating, productCategories, suppliers } = props;
 
   const { photo, photoContentType } = productEntity;
 
@@ -32,6 +34,15 @@ export const ProductUpdate = (props: IProductUpdateProps) => {
       props.getEntity(props.match.params.id);
     }
   }, []);
+
+  useEffect(() => {
+    props.getProductCategories();
+    dispatch(getSuppliers());
+    // getSuppliers();
+  }, []);
+
+  // eslint-disable-next-line no-console
+  console.log('suppliers: ', suppliers);
 
   const onBlobChange = (isAnImage, name) => event => {
     setFileData(event, (contentType, data) => props.setBlob(name, data, contentType), isAnImage);
@@ -53,6 +64,8 @@ export const ProductUpdate = (props: IProductUpdateProps) => {
         ...productEntity,
         ...values,
       };
+      // eslint-disable-next-line no-console
+      console.log('new entity: ', entity);
 
       if (isNew) {
         props.createEntity(entity);
@@ -61,6 +74,12 @@ export const ProductUpdate = (props: IProductUpdateProps) => {
       }
     }
   };
+
+  const options = [
+    { label: 'Option 1', value: 1 },
+    { label: 'Option 2', value: 2 },
+    { label: 'Option 3', value: 3 },
+  ];
 
   return (
     <div>
@@ -111,13 +130,27 @@ export const ProductUpdate = (props: IProductUpdateProps) => {
                 <Label id="categoryIdLabel" for="product-categoryId">
                   Category Id
                 </Label>
-                <AvField id="product-categoryId" type="string" className="form-control" name="categoryId" />
+                <AvField id="product-categoryId" type="select" className="form-control" name="categoryId">
+                  {productCategories.length &&
+                    productCategories.map(cat => (
+                      <option label={cat.name} key={cat.id}>
+                        {cat.id}
+                      </option>
+                    ))}
+                </AvField>
               </AvGroup>
               <AvGroup>
                 <Label id="supplierIdLabel" for="product-supplierId">
                   Supplier Id
                 </Label>
-                <AvField id="product-supplierId" type="string" className="form-control" name="supplierId" />
+                <AvField id="supplier-supplierId" type="select" className="form-control" name="supplierId">
+                  {suppliers.length &&
+                    suppliers.map(sup => (
+                      <option key={sup.id} label={sup.name}>
+                        {sup.id}
+                      </option>
+                    ))}
+                </AvField>
               </AvGroup>
               <AvGroup>
                 <Label id="buyPriceLabel" for="product-buyPrice">
@@ -198,9 +231,12 @@ const mapStateToProps = (storeState: IRootState) => ({
   loading: storeState.product.loading,
   updating: storeState.product.updating,
   updateSuccess: storeState.product.updateSuccess,
+  productCategories: storeState.product.productCategories,
+  suppliers: storeState.supplier.entities,
 });
 
 const mapDispatchToProps = {
+  getProductCategories,
   getEntity,
   updateEntity,
   setBlob,

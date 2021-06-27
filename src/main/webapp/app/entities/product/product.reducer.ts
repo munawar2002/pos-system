@@ -8,6 +8,7 @@ import { IProduct, defaultValue } from 'app/shared/model/product.model';
 
 export const ACTION_TYPES = {
   FETCH_PRODUCT_LIST: 'product/FETCH_PRODUCT_LIST',
+  FETCH_PRODUCTCATEGORY_LIST: 'productCategory/FETCH_PRODUCTCATEGORY_LIST',
   FETCH_PRODUCT: 'product/FETCH_PRODUCT',
   CREATE_PRODUCT: 'product/CREATE_PRODUCT',
   UPDATE_PRODUCT: 'product/UPDATE_PRODUCT',
@@ -24,6 +25,7 @@ const initialState = {
   updating: false,
   totalItems: 0,
   updateSuccess: false,
+  productCategories: [],
 };
 
 export type ProductState = Readonly<typeof initialState>;
@@ -33,6 +35,7 @@ export type ProductState = Readonly<typeof initialState>;
 export default (state: ProductState = initialState, action): ProductState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_PRODUCT_LIST):
+    case REQUEST(ACTION_TYPES.FETCH_PRODUCTCATEGORY_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PRODUCT):
       return {
         ...state,
@@ -50,6 +53,7 @@ export default (state: ProductState = initialState, action): ProductState => {
         updating: true,
       };
     case FAILURE(ACTION_TYPES.FETCH_PRODUCT_LIST):
+    case FAILURE(ACTION_TYPES.FETCH_PRODUCTCATEGORY_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PRODUCT):
     case FAILURE(ACTION_TYPES.CREATE_PRODUCT):
     case FAILURE(ACTION_TYPES.UPDATE_PRODUCT):
@@ -65,8 +69,14 @@ export default (state: ProductState = initialState, action): ProductState => {
       return {
         ...state,
         loading: false,
-        entities: action.payload.data,
+        entities: action.payload,
         totalItems: parseInt(action.payload.headers['x-total-count'], 10),
+      };
+    case SUCCESS(ACTION_TYPES.FETCH_PRODUCTCATEGORY_LIST):
+      return {
+        ...state,
+        loading: false,
+        productCategories: action.payload.data,
       };
     case SUCCESS(ACTION_TYPES.FETCH_PRODUCT):
       return {
@@ -110,6 +120,7 @@ export default (state: ProductState = initialState, action): ProductState => {
 };
 
 const apiUrl = 'api/products';
+const apiUrlProductCategory = 'api/product-categories';
 
 // Actions
 
@@ -117,6 +128,14 @@ export const getEntities: ICrudGetAllAction<IProduct> = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_PRODUCT_LIST,
+    payload: axios.get<IProduct>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),
+  };
+};
+
+export const getProductCategories: ICrudGetAllAction<IProduct> = (page, size, sort) => {
+  const requestUrl = `${apiUrlProductCategory}`;
+  return {
+    type: ACTION_TYPES.FETCH_PRODUCTCATEGORY_LIST,
     payload: axios.get<IProduct>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),
   };
 };
