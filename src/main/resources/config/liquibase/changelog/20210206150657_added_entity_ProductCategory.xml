@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-        <property name="autoIncrement" value="true"/>
+    <property name="autoIncrement" value="true"/>
 
     <!--
         Added the entity ProductCategory.
@@ -45,13 +45,13 @@
     -->
     <changeSet id="20210206150657-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/product_category.csv"
-                  separator=";"
-                  tableName="product_category">
+            file="config/liquibase/fake-data/product_category.csv"
+            separator=";"
+            tableName="product_category">
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
             <column name="created_by" type="string"/>
-            <column name="creation_date" type="datetime"/>
+            <column name="creation_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
