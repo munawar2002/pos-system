@@ -52,7 +52,7 @@ export const Store = (props: IStoreProps) => {
                   </td>
                   <td>{store.name}</td>
                   <td>{store.address}</td>
-                  <td>{store.managedBy}</td>
+                  <td>{(store.managedBy as any).firstName}</td>
                   <td>{store.active ? 'true' : 'false'}</td>
                   <td>{store.createdBy}</td>
                   <td>{store.createdDate ? <TextFormat type="date" value={store.createdDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
