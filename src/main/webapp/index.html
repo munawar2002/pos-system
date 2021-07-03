@@ -16,7 +16,7 @@
     <!--[if lt IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <jhi-main>
+    <div id="root">
         <div class="app-loading">
             <div class="lds-css ng-scope">
                 <div class="lds-pacman">
@@ -36,12 +36,12 @@
                     <li>You installed a Node.js version that doesn't work with JHipster: please use an LTS (long-term support) version, as it's the only version we support.</li>
                 </ol>
                 <h2>Building the client side code again</h2>
-                <p>If you want to go fast, run <code style="color:red">./mvnw</code> to build and run everything.</p>
+                <p>If you want to go fast, run <code style="color:red"></code> to build and run everything.</p>
                 <p>If you want to have more control, so you can debug your issue more easily, you should follow the following steps:</p>
                 <ol>
                     <li>Install npm dependencies with the command <code style="color:red">npm install</code></li>
                     <li>Build the client with the command <code style="color:red">npm run webpack:build</code> or <code style="color:red">npm start</code></li>
-                    <li>Start the server with <code style="color:red">./mvnw</code> or using your IDE</li>
+                    <li>Start the server with <code style="color:red"></code> or using your IDE</li>
                 </ol>
 
                 <h2>Getting more help</h2>
@@ -66,12 +66,11 @@
                 <!-- end of troubleshooting content -->
             </div>
         </div>
-    </jhi-main>
+    </div>
     <noscript>
         <h1>You must enable javascript to view this page.</h1>
     </noscript>
     <script type="text/javascript" language="javascript">
-        // show an error message if the app loading takes more than 5 sec
         window.onload=function() {
             setTimeout(showError, 4000);
         }

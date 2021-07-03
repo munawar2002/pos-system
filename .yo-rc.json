@@ -25,7 +25,7 @@
     "embeddableLaunchScript": false,
     "useSass": true,
     "clientPackageManager": "npm",
-    "clientFramework": "angularX",
+    "clientFramework": "react",
     "clientTheme": "none",
     "clientThemeVariant": "",
     "creationTimestamp": 1612568835808,
@@ -36,6 +36,7 @@
     "otherModules": [],
     "enableTranslation": false,
     "blueprints": [],
-    "lastLiquibaseTimestamp": 1619228802000
+    "lastLiquibaseTimestamp": 1619228802000,
+    "skipServer": true
   }
 }

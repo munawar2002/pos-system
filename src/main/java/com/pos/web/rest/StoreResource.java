@@ -1,16 +1,13 @@
 package com.pos.web.rest;
 
 import com.pos.domain.Store;
-import com.pos.domain.dto.StoreDto;
 import com.pos.repository.StoreRepository;
-import com.pos.service.StoreService;
 import com.pos.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,50 +36,47 @@ public class StoreResource {
 
     private final StoreRepository storeRepository;
 
-    @Autowired
-    private StoreService storeService;
-
     public StoreResource(StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
 
     /**
-     * {@code POST  /stores} : Create a new storeDto.
+     * {@code POST  /stores} : Create a new store.
      *
-     * @param storeDto the storeDto to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new storeDto, or with status {@code 400 (Bad Request)} if the storeDto has already an ID.
+     * @param store the store to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new store, or with status {@code 400 (Bad Request)} if the store has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/stores")
-    public ResponseEntity<Store> createStore(@Valid @RequestBody StoreDto storeDto) throws URISyntaxException {
-        log.debug("REST request to save Store : {}", storeDto);
-        if (storeDto.getId() != null) {
-            throw new BadRequestAlertException("A new storeDto cannot already have an ID", ENTITY_NAME, "idexists");
+    public ResponseEntity<Store> createStore(@Valid @RequestBody Store store) throws URISyntaxException {
+        log.debug("REST request to save Store : {}", store);
+        if (store.getId() != null) {
+            throw new BadRequestAlertException("A new store cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Store result = storeService.saveStore(storeDto);
+        Store result = storeRepository.save(store);
         return ResponseEntity.created(new URI("/api/stores/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /stores} : Updates an existing storeDto.
+     * {@code PUT  /stores} : Updates an existing store.
      *
-     * @param storeDto the storeDto to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated storeDto,
-     * or with status {@code 400 (Bad Request)} if the storeDto is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the storeDto couldn't be updated.
+     * @param store the store to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated store,
+     * or with status {@code 400 (Bad Request)} if the store is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the store couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/stores")
-    public ResponseEntity<Store> updateStore(@Valid @RequestBody StoreDto storeDto) throws URISyntaxException {
-        log.debug("REST request to update Store : {}", storeDto);
-        if (storeDto.getId() == null) {
+    public ResponseEntity<Store> updateStore(@Valid @RequestBody Store store) throws URISyntaxException {
+        log.debug("REST request to update Store : {}", store);
+        if (store.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Store result = storeService.saveStore(storeDto);
+        Store result = storeRepository.save(store);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, storeDto.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, store.getId().toString()))
             .body(result);
     }
 

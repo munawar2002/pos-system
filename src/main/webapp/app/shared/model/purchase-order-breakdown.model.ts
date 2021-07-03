@@ -6,12 +6,4 @@ export interface IPurchaseOrderBreakdown {
   unitPrice?: number;
 }
 
-export class PurchaseOrderBreakdown implements IPurchaseOrderBreakdown {
-  constructor(
-    public id?: number,
-    public purchaseOrderId?: number,
-    public productId?: number,
-    public quantity?: number,
-    public unitPrice?: number
-  ) {}
-}
+export const defaultValue: Readonly<IPurchaseOrderBreakdown> = {};

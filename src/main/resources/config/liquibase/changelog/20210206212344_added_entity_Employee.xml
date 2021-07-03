@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-        <property name="autoIncrement" value="true"/>
+    <property name="autoIncrement" value="true"/>
 
     <!--
         Added the entity Employee.
@@ -68,9 +68,9 @@
     -->
     <changeSet id="20210206212344-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/employee.csv"
-                  separator=";"
-                  tableName="employee">
+            file="config/liquibase/fake-data/employee.csv"
+            separator=";"
+            tableName="employee">
             <column name="id" type="numeric"/>
             <column name="first_name" type="string"/>
             <column name="last_name" type="string"/>

@@ -8,18 +8,7 @@ export interface IProductCompany {
   contactPerson?: string;
   contactPersonNo?: string;
   createdBy?: string;
-  createdDate?: Moment;
+  createdDate?: string;
 }
 
-export class ProductCompany implements IProductCompany {
-  constructor(
-    public id?: number,
-    public name?: string,
-    public address?: string,
-    public contactNo?: string,
-    public contactPerson?: string,
-    public contactPersonNo?: string,
-    public createdBy?: string,
-    public createdDate?: Moment
-  ) {}
-}
+export const defaultValue: Readonly<IProductCompany> = {};

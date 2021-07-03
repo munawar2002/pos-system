@@ -5,13 +5,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-
 import com.pos.domain.enumeration.PaymentType;
 
 import com.pos.domain.enumeration.OrderStatus;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * A PurchaseInvoice.

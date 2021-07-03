@@ -11,21 +11,7 @@ export interface IProduct {
   photoContentType?: string;
   photo?: any;
   createdBy?: string;
-  createdDate?: Moment;
+  createdDate?: string;
 }
 
-export class Product implements IProduct {
-  constructor(
-    public id?: number,
-    public code?: string,
-    public name?: string,
-    public categoryId?: number,
-    public supplierId?: number,
-    public buyPrice?: number,
-    public sellPrice?: number,
-    public photoContentType?: string,
-    public photo?: any,
-    public createdBy?: string,
-    public createdDate?: Moment
-  ) {}
-}
+export const defaultValue: Readonly<IProduct> = {};

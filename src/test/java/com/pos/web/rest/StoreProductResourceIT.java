@@ -285,6 +285,8 @@ public class StoreProductResourceIT {
         assertThat(storeProductList).hasSize(databaseSizeBeforeUpdate);
         StoreProduct testStoreProduct = storeProductList.get(storeProductList.size() - 1);
         assertThat(testStoreProduct.getQuantity()).isEqualTo(UPDATED_QUANTITY);
+        assertThat(testStoreProduct.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
+        assertThat(testStoreProduct.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
     }
 
     @Test

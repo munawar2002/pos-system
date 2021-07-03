@@ -2,7 +2,6 @@ package com.pos.web.rest;
 
 import com.pos.domain.Employee;
 import com.pos.repository.EmployeeRepository;
-import com.pos.security.SecurityUtils;
 import com.pos.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,9 +53,6 @@ public class EmployeeResource {
         if (employee.getId() != null) {
             throw new BadRequestAlertException("A new employee cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
-        employee.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-        employee.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         Employee result = employeeRepository.save(employee);
         return ResponseEntity.created(new URI("/api/employees/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -80,8 +74,6 @@ public class EmployeeResource {
         if (employee.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        employee.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-        employee.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         Employee result = employeeRepository.save(employee);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, employee.getId().toString()))

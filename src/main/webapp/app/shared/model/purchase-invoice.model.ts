@@ -15,25 +15,9 @@ export interface IPurchaseInvoice {
   discountPercentage?: number;
   discountAmount?: number;
   createdBy?: string;
-  createdDate?: Moment;
+  createdDate?: string;
 }
 
-export class PurchaseInvoice implements IPurchaseInvoice {
-  constructor(
-    public id?: number,
-    public supplierId?: number,
-    public paymentType?: PaymentType,
-    public purchaseOrderId?: number,
-    public invoiceStatus?: OrderStatus,
-    public paidAmount?: number,
-    public totalAmount?: number,
-    public tenderedAmount?: number,
-    public discountAvailed?: boolean,
-    public discountPercentage?: number,
-    public discountAmount?: number,
-    public createdBy?: string,
-    public createdDate?: Moment
-  ) {
-    this.discountAvailed = this.discountAvailed || false;
-  }
-}
+export const defaultValue: Readonly<IPurchaseInvoice> = {
+  discountAvailed: false,
+};
